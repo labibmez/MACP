@@ -42,3 +42,8 @@ body {
     text-align: center ;
 }
 
+.popup {
+    border-radius: 15px;
+    padding: 10px;
+    background: #FFFFFF;  
+}  
