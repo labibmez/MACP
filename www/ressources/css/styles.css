@@ -1,0 +1,99 @@
+
+  <style>
+       <!--cursor blocage -->
+ * { 
+        -webkit-highlight:           none;
+        -webkit-touch-callout :      none;
+        -webkit-user-select:         none;
+}
+        input, textarea {
+    -webkit-user-select: auto;
+}
+        
+               <!--fin cursor blocage -->
+      
+      </style>
+ 
+ 
+.list-block .item-title.label{ -webkit-flex-shrink:0;-ms-flex:0 0 auto;flex-shrink:0}
+Amount2{width:100%}
+.AMOUNT{width:50%;}
+.item-label  {width:220px  !important;}  
+.input-item{
+ 
+    float:left !important;
+}
+input{
+    margin-left:0px !important;  
+    float:left !important;
+}
+ 
+#containerPIE, #sliders {
+	min-width:  100%;
+	max-width: 100%;
+	margin: 0 auto;
+}
+#containerPIE {
+	height: 100%; 
+}
+        
+       <!--cursor blocage -->
+ 
+ 
+ 
+
+         
+  .swiper-button-prev{position:absolute;top:50%;
+   
+    
+    visibility: ;
+    width:17px;
+    height:30px;
+    margin-left:300px;
+    margin-right:300px;
+    margin-top:-22px;
+    z-index:10;cursor:pointer;
+ color:transparent;
+background-position:center;background-repeat:no-repeat}
+    
+    
+    
+    
+.swiper-button-next{position:absolute;top:50%;
+       visibility: ;
+    
+    width:17px;
+    height:30px;
+    margin-left:300px;
+    margin-right:300px;
+    margin-top:-22px;
+    z-index:10;cursor:pointer;
+-moz-background-size:17px 30px;
+-webkit-background-size:17px 30px;
+background-size:17px 30px;
+background-position:center;background-repeat:no-repeat}
+
+  
+ 
+
+
+.ios-style, .ios-style ul, .ios-style ol { background: #fff; height: 200px; padding: 2px; width: 260px; }
+		.ios-style { overflow-x: hidden; overflow-y: auto; }
+		.ios-style::-webkit-scrollbar { width: 5px; height: 5px; }
+		.ios-style::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.6); border-radius: 4px; }
+		.ios-style ul, .ios-style ol { overflow-y: visible; border: none; }
+		.ios-style.ui-menu-icons .ui-menu-item a { position: inherit; }
+		.ios-style .ui-menu-item a { cursor: pointer; outline: none; }
+
+
+
+
+
+	.ios-style, .ios-style ul, .ios-style ol { background: #fff; height: 200px; padding: 2px; width: 260px; }
+		.ios-style { overflow-x: hidden; overflow-y: auto; }
+		.ios-style::-webkit-scrollbar { width: 5px; height: 5px; }
+		.ios-style::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.6); border-radius: 4px; }
+		.ios-style ul, .ios-style ol { overflow-y: visible; border: none; }
+		.ios-style.ui-menu-icons .ui-menu-item a { position: inherit; }
+		.ios-style .ui-menu-item a { cursor: pointer; outline: none; }
+
