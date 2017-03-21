@@ -42,8 +42,7 @@ $$('.infinite-scroll').on('infinite', function () {
 });        
 
                   
-function startWorkflowFromSearchGrid(itemId)
-{
+function startWorkflowFromSearchGrid(itemId){
     myApp.showPreloader();
     selectedItem=itemId;
     var url='http://'+ sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/StartWorkFlowFromSearchGrid';
@@ -64,8 +63,7 @@ function startWorkflowFromSearchGrid(itemId)
         type: 'POST',               
         url: url,                    
         contentType: "text/plain",                          
-        dataType: "json",                               
-        async: false,                                
+        dataType: "json",                              
         data: data,         
         success: function(data) {                 
             
@@ -73,18 +71,14 @@ function startWorkflowFromSearchGrid(itemId)
           
            
         },
-        error: function(e) {       
-            console.log(e.message);  
-            verifconnexion = false;        
-            myApp.hideIndicator();  
-                         
+        error: function(e) {         
+            verifconnexion = false;  
         }                           
     });    
 }  
 
 
-function manageStartWorkFlowResponse(data)
-{
+function manageStartWorkFlowResponse(data){
     switch(data.status)
         {
             case "ok":
@@ -120,7 +114,7 @@ function manageStartWorkFlowResponse(data)
         }
 }
 
-
+    
 
 function startWorkFlowEvent(workflowId,message){
      myApp.confirm(message, 'MACP',
@@ -134,8 +128,8 @@ function startWorkFlowEvent(workflowId,message){
 }
 
 function startWorkFlowItem(workflowId){
+    myApp.showPreloader();
     var url='http://'+ sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/StartWorkFlow';
-    myApp.showIndicator();
      var data="{"+          
         "\"itemId\":\""+selectedItem+"\","+  
         "\"workfloawId\":\""+workflowId+"\"," +
@@ -145,18 +139,16 @@ function startWorkFlowItem(workflowId){
         type: 'POST',               
         url: url,                  
         contentType: "text/plain",                          
-        dataType: "json",                               
-        async: false,                              
+        dataType: "json",                             
         data: data,         
         success: function(data) { 
-            myApp.hideIndicator();
              HomeBackButton.style.visibility="hidden";  
-            myApp.closeModal();  
+             myApp.hidePreloader(); 
+             myApp.closeModal('.popup');
              mainView.router.back({force:true,pageName:"homePage"});   
         },
         error: function(e) {       
-            console.log(e.message);       
-            myApp.hideIndicator();  
+            console.log(e.message);      
                          
         }                           
     });   
