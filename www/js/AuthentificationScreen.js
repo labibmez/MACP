@@ -3,7 +3,7 @@ var $$ = Dom7;
 function onClickLoginButton(){
       try {
           var login = document.getElementById('userName').value;
-          myApp.showIndicator();
+          myApp.showPreloader();
           var password = document.getElementById('password').value;
            var url ='http://'+ sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/Authentication/' + login + '/' + password;
           parseDataGet(url);   
@@ -13,11 +13,11 @@ function onClickLoginButton(){
    
 function manageAuthentifaction(result)
 {
-    myApp.hideIndicator();    
+       
     switch (result["status"]) {   
               case "error":
-                 
                  myApp.alert(result["message"],'MACP');
+                 myApp.hidePreloader(); 
                   break;
               case "ok":
                  {
@@ -55,7 +55,6 @@ function parseDataGet(url) {
     $.ajax({
         type: 'GET',
         url: url, 
-        async: false,
         contentType: "text/plain",
         dataType: 'json',
         success: function(data) {
@@ -63,7 +62,7 @@ function parseDataGet(url) {
         },
         error: function(e) {
            // if(e.status===0)
-             myApp.hideIndicator();    
+             myApp.hidePreloader();    
               myApp.alert('Error occurs in the system');
         }
     });
