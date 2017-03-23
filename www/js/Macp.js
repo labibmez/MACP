@@ -15,14 +15,64 @@ function westMenuItem(item,title,screenName){
     currentItem=item;
     pageTitleContent=title;
     mainView.router.load({url: screenName,reload:true});  
+     mainView.hideToolbar();  
 }  
+myApp.onPageReinit('homePage', function (page) {
+      document.getElementById("tasks").innerHTML=null;
+     setTimeout(function() {reInitHomePage(); }, 100) ;
+});  
+
+
+
+function reInitHomePage(){ 
+     myApp.showPreloader();
+      var url='http://'+ sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/ReInitHomePage';
+     var  ProfilesList=GenerateResponseArray(sessionStorage.getItem("ProfilesList")); 
+   var  AccessRightUserList=GenerateResponseArray(sessionStorage.getItem("AccessRightUserList")); 
+   var  InternalEntitiesShortName=GenerateResponseArray(sessionStorage.getItem("InternalEntitiesShortname"));    
+   var  GroupsList=GenerateResponseArray(sessionStorage.getItem("GroupsList"));     
+   var  InternalEntities=GenerateResponseArray(sessionStorage.getItem("InternalEntities"));
+   ProfilesList=JSON.stringify(ProfilesList); 
+   AccessRightUserList =JSON.stringify(AccessRightUserList); 
+   GroupsList =JSON.stringify(GroupsList); 
+   InternalEntities=JSON.stringify(InternalEntities); 
+   InternalEntitiesShortName=JSON.stringify(InternalEntitiesShortName);    
+   var data="{"+  
+        "\"userid\":\""+sessionStorage.getItem("userId")+"\"," +
+        "\"userShortName\":\""+setUser_ShortName(sessionStorage.getItem("userShortName"))+"\"," +
+        "\"InternalEntities\":"+InternalEntities+","+
+        "\"InternalEntitiesShortName\":"+InternalEntitiesShortName+","+
+        "\"ProfilesList\":"+ProfilesList+","+  
+        "\"GroupsList\":"+GroupsList+","+    
+        "\"AccessRightUserList\":"+AccessRightUserList+","+    
+        "\"HomePageConfig\":\""+sessionStorage.getItem("HomePageConfig")+"\","+      
+        "\"windowWidth\":\""+window.innerWidth+"\","+
+        "\"windowHeight\":\""+(window.innerHeight-90)+"\"}";
+     $.ajax({             
+        type: 'POST',                             
+        url: url,                                  
+        contentType: "text/plain",                                      
+        dataType: "json",                               
+        data: data,      
+        success: function(data) {
+             document.getElementById("tasks").innerHTML=data.TasksContent;
+            console.log("success");
+             myApp.hidePreloader();
+        },
+        error: function(e) {
+             myApp.hideIndicator();     
+              myApp.alert("error occured in the system");
+        }
+    });   
+}
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
      domCache: true
 });
 function saveFirstConfig(){
     ip = document.getElementById('ipFirstConfig').value,
-     port = document.getElementById('portFirstConfig').value
+     port = document.getElementById('portFirstConfig').value;
+   //  saveWSConfiguration(ip,port);
     sessionStorage.setItem('Ip_config', ip);
     sessionStorage.setItem('Ip_port', port);
     myApp.closeModal();
@@ -34,7 +84,8 @@ function loadJSFile(screenName){
     document.body.appendChild(js);
 }
 function verifConfig(){          
-     
+   // manageDB();
+    //getWSConfiguration();
     ip_config=sessionStorage.getItem("Ip_config");
     ip_port=sessionStorage.getItem("Ip_port");
     if(ip_config===null || ip_port===null)
@@ -68,19 +119,20 @@ myApp.onPageInit('searchScreen', function (page) {
     pageTitleElement=document.getElementById("title_searchScreen");
     pageTitleElement.textContent=pageTitleContent;
     myApp.showPreloader();
-    setTemplate_HeaderData('searchScreen');
+    setTemplate_HeaderData('searchScreen');  
     setTimeout(function() {loadsearchScreen(); }, 1000) ;
 });  
 myApp.onPageInit('newInputScreen', function (page) {
-    HomeBackButton.style.visibility="visible";    
+    HomeBackButton.style.visibility="visible"; 
     createLanguagesList('newInputScreen');
+    mainView.hideToolbar();  
     createLogoutPopover('newInputScreen');
     myApp.params.swipePanel=false;
     pageTitleElement=document.getElementById("title_newInputScreen");
     pageTitleElement.textContent=pageTitleContent;
-     myApp.showPreloader();
+    myApp.showPreloader();
     setTemplate_HeaderData('newInputScreen');
-     setTimeout(function() {loadNewInputPage(); }, 1000) ;
+    setTimeout(function() {loadNewInputPage(); }, 1000) ;
 });              
 myApp.onPageInit('searchResultScreen', function (page) {
     HomeBackButton.style.visibility="visible";
@@ -109,9 +161,8 @@ function loadsearchScreen(){
       GetHomePage('http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/getHomePage');  
 }
      
-function loadNewInputPage()
-{
-    currentItem=currentItem.charAt(0).toLowerCase()+currentItem.slice(1);
+function loadNewInputPage(){
+    currentItem=currentItem.toLowerCase();
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetNewInputScreen/'+currentItem;
     GetNewInputScreen(url);
 }                
@@ -121,15 +172,20 @@ function GetNewInputScreen(url){
                     type: "GET", 
                     dataType:"json",  
                     url: url,
-                    success: function(data) { 
+                    success: function(data) {                   
+                         mainView.showToolbar();
                         document.getElementById("newInputForm").innerHTML=data.content;
+                        document.getElementById("newInput-toolbarContent").innerHTML=data.button;
+                        mainView.showToolbar();
                         loadJSFile("js/NewInputScreen.js");
                          myApp.hidePreloader();
                     },
                     error: function(e) {
-                       myApp.alert("error occured");      
-                    }   
-            });     
+                       myApp.hidePreloader();
+                       myApp.alert("error occured");
+                          
+                    }    
+            });       
 }
 
 function GetSearchPage(url){ 
@@ -166,8 +222,7 @@ function GenerateResponseArray(element){
     return result;        
 } 
 
-function setUser_ShortName(userShortName)
-{
+function setUser_ShortName(userShortName){
     var res = userShortName.split('\\');
     return res[0]+'\\\\'+res[1];
     
@@ -197,7 +252,6 @@ function GetHomePage(url) {
         "\"windowWidth\":\""+window.innerWidth+"\","+
         "\"windowHeight\":\""+(window.innerHeight-90)+"\"}";  
     var dataToReturn = 'null';    
-    var wpost = "e=132&c=abcdef&s=demoBASICA";
      $.ajax({             
         type: 'POST',                             
         url: url,                                
@@ -298,8 +352,10 @@ function lunchSearchResult(url){
         },
         error: function(e) { 
             console.log(e.message);  
-            verifconnexion = false;        
+            verifconnexion = false;  
+            
             myApp.hidePreloader();
+            myApp.alert("error occured");
  
                          
         }                           

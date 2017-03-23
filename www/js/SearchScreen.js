@@ -10,7 +10,7 @@
      
 
 
-$$('.form-to-data').on('click', function(){
+$$('.search-form-to-data').on('click', function(){
     var i;
     var indexToSelect=1;
     var isValid = true;
@@ -71,9 +71,8 @@ $$('.form-to-data').on('click', function(){
        $(x[indexToSelect]).next().children().first().focus();
     }else
     {
-        var formData = myApp.formToData('#my-form');
+        var formData = myApp.formToData('#my-search-form');
         searchParams=JSON.stringify(formData);
-      //mainView.router.load({url: 'searchResultScreen.html',reload:true});
         mainView.router.load({url: 'searchResultScreen.html',reload:false,ignoreCache:true});
     }
 });

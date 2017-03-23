@@ -1,8 +1,9 @@
 
 
 function saveConfiguration() {
-     ip = document.getElementById('ip').value,
-     port = document.getElementById('port').value
+    ip = document.getElementById('ip').value,
+    port = document.getElementById('port').value;
+   // saveWSConfiguration(ip,port);
     sessionStorage.setItem('Ip_config', ip);
     sessionStorage.setItem('Ip_port', port);  
     mainView.router.back();                            
