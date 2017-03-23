@@ -4,7 +4,7 @@ function loadScreen(divID)
             $.ajax({ 
                     type: "GET", 
                     dataType:"json",   
-                    url: "http://192.168.1.47:92/MobileAPI.svc/GetRelatedItemScreen/"+divID+"/ /244",
+                    url: "http://192.168.1.47:92/MobileAPI.svc/GetRelatedItemScreen/"+divID+"/"+itemId+"/244",
                     success: function(data) { 
                        // document.getElementById(divID).innerHTML=data.content;
                         myApp.popup('<div class="popup" style="width:90% !important; top:50% !important; left:35% !important; right:20% !important;  position:absoloute !important" >'+data.content+'</div>', true);
