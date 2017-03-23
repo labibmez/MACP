@@ -55,6 +55,79 @@
 
 
 
+
+.tabs90{
+    width : 98px;
+    height: 25px;
+
+}
+.tabs150{
+    width : 152px;
+    height: 25px;
+
+
+}
+.tabs200{
+    width : 202px;
+    height: 25px;
+
+}
+.tabs250{
+    width : 250px;
+    height: 25px;
+
+}
+.tabs300{
+    width : 300px;
+    height: 25px;
+
+}
+.tabs350{
+    width : 350px;
+    height: 25px;
+
+}
+
+#divWrap .Tabs{
+    /*display:none; Add display to remove reserved DOM space*/
+    opacity:0;
+    display: none;
+    position : absolute;width: 100% !important;
+}
+
+
+#divWrap .Active{
+    opacity:1 !important;
+        display: block !important;
+
+}
+.selectedTab{
+      background: #1A3F62 !important;
+  
+}
+
+.tabsMenu {
+    white-space: nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.menuTabButton
+{
+    border: 0;
+    background: #419EF7;
+    box-shadow:none; 
+    border-radius: 25px !important;
+    color : white;
+    padding: 5px ; 
+    border-radius: 0px;
+    margin-right: 2.5px;
+    margin-left: 3px;
+
+}
+
 .navbarGlobeIcon:before{
     font-family: FontAwesome !important;
     color: #2196f3 !important;

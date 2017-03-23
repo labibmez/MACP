@@ -4,6 +4,8 @@ var selectedItem;
 var lastIndex = 30; 
 // Max items to load
 var maxItems = 120;
+
+var itemId;
  
 // Append items per load
 var itemsPerLoad = 30;
@@ -77,7 +79,10 @@ function startWorkflowFromSearchGrid(itemId){
     });    
 }  
 
-
+function editItem(id){ 
+    itemId=id;
+    mainView.router.load({url: "editScreen.html" ,reload:false,ignoreCache:true});  
+}
 function manageStartWorkFlowResponse(data){
     switch(data.status)
         {
@@ -113,13 +118,13 @@ function manageStartWorkFlowResponse(data){
                 }
         }
 }
+ 
 
-    
 
 function startWorkFlowEvent(workflowId,message){
      myApp.confirm(message, 'MACP',
                             function () {
-                                startWorkFlowItem(workflowId);
+                                startWorkFlowItem(workflowId); 
                                         },
                                         function () {
                                         
@@ -128,7 +133,7 @@ function startWorkFlowEvent(workflowId,message){
 }
 
 function startWorkFlowItem(workflowId){
-    myApp.showPreloader();
+    myApp.showPreloader(); 
     var url='http://'+ sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/StartWorkFlow';
      var data="{"+          
         "\"itemId\":\""+selectedItem+"\","+  
