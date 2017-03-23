@@ -67,9 +67,9 @@ function handleRequiredIcon(component,componentType,elementId,decimalprecision,g
             break;
         case "default" :         
             $(component).closest("div.item-inner").removeClass("requiredIcon");
-            NumericFormat(elementId,groupseparator);
+            NumericFormat(elementId,groupseparator); 
             break;
-        case "checkbox" :         
+        case "checkbox" :            
             $(component).closest("label.label-checkbox").removeClass("requiredIcon");
             break; 
     } 

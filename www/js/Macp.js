@@ -8,14 +8,18 @@ var pageTitleContent;
 var pageTitleElement
 var currentItem;
 var searchParams;
-var HomeBackButton; 
+var HomeBackButton;
 var myApp=new Framework7({ swipeBackPage : false,statusbarOverlay:true}) ;
 
-function westMenuItem(item,title,screenName){
+
+
+function westMenuItem(item,title,screenName){ 
+
     currentItem=item;
     pageTitleContent=title;
     mainView.router.load({url: screenName,reload:true});  
-     mainView.hideToolbar();  
+    mainView.hideToolbar();  
+
 }  
 myApp.onPageReinit('homePage', function (page) {
       document.getElementById("tasks").innerHTML=null;
@@ -71,8 +75,7 @@ var mainView = myApp.addView('.view-main', {
 });
 function saveFirstConfig(){
     ip = document.getElementById('ipFirstConfig').value,
-     port = document.getElementById('portFirstConfig').value;
-   //  saveWSConfiguration(ip,port);
+    port = document.getElementById('portFirstConfig').value;
     sessionStorage.setItem('Ip_config', ip);
     sessionStorage.setItem('Ip_port', port);
     myApp.closeModal();
@@ -121,7 +124,19 @@ myApp.onPageInit('searchScreen', function (page) {
     myApp.showPreloader();
     setTemplate_HeaderData('searchScreen');  
     setTimeout(function() {loadsearchScreen(); }, 1000) ;
-});  
+}); 
+
+myApp.onPageInit('editScreen', function (page) {
+    createLanguagesList('editScreen');
+    createLogoutPopover('editScreen');
+    myApp.params.swipePanel=false;
+    myApp.showPreloader();
+    pageTitleElement=document.getElementById("title_editScreen");
+    pageTitleElement.textContent=pageTitleContent;
+    setTemplate_HeaderData('editScreen');
+    setTimeout(function() {loadEditScreen(itemId); }, 1000) ;
+}); 
+
 myApp.onPageInit('newInputScreen', function (page) {
     HomeBackButton.style.visibility="visible"; 
     createLanguagesList('newInputScreen');
@@ -163,9 +178,33 @@ function loadsearchScreen(){
      
 function loadNewInputPage(){
     currentItem=currentItem.toLowerCase();
+
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetNewInputScreen/'+currentItem;
     GetNewInputScreen(url);
-}                
+}  
+
+function loadEditScreen(itemId)
+{
+    var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetEditScreen/'+currentItem+'/'+itemId;
+    GetEditScreen(url);
+} 
+
+function GetEditScreen(url){
+   
+    $.ajax({ 
+                    type: "GET", 
+                    dataType:"json",  
+                    url: url,
+                    success: function(data) { 
+                        document.getElementById("editScreenForm").innerHTML=data.content;
+                        loadJSFile("js/EditScreen.js");
+                         myApp.hidePreloader();
+                    },
+                    error: function(e) {
+                       myApp.alert("error occured");      
+                    }   
+            });     
+}  
                 
 function GetNewInputScreen(url){
     $.ajax({ 
@@ -187,6 +226,8 @@ function GetNewInputScreen(url){
                     }    
             });       
 }
+
+
 
 function GetSearchPage(url){ 
     $.ajax({ 
