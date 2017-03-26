@@ -17,9 +17,5 @@
             "PACKAGE_NAME": "io.cordova.hellocordova"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        }
-    }
+    "dependent_plugins": {}
 }
