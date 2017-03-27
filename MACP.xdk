@@ -6,7 +6,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "src": "jsapp/template-blank-cordova-ad-project/sample.zip",
       "projectGuid": "197c1c27-5acb-431a-8179-5c479e8a8b62",
-      "lastModifiedDate": 1490266034185,
+      "lastModifiedDate": 1490380493198,
       "creationDate": 1486130602862
     },
     "XDK-app-designer": "true",
@@ -72,7 +72,7 @@
         "originType": "cordova.io",
         "origin": "cordova-plugin-splashscreen",
         "permissions": {},
-        "topLevel": false,
+        "topLevel": true,
         "gitref": "",
         "name": "Splashscreen",
         "description": "Cordova Splashscreen Plugin",

@@ -5,14 +5,16 @@ var totalRowNumber;
 var languagesList;
 var $$ = Dom7;
 var pageTitleContent;
-var pageTitleElement
+var pageTitleElement;
 var currentItem;
 var searchParams;
 var HomeBackButton;
 var myApp=new Framework7({ swipeBackPage : false,statusbarOverlay:true}) ;
-
-
-
+var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024);
+var mainView = myApp.addView('.view-main', {
+  dynamicNavbar: true,
+     domCache: true
+});
 function westMenuItem(item,title,screenName){ 
 
     currentItem=item;
@@ -20,13 +22,11 @@ function westMenuItem(item,title,screenName){
     mainView.router.load({url: screenName,reload:true});  
     mainView.hideToolbar();  
 
-}  
+};  
 myApp.onPageReinit('homePage', function (page) {
       document.getElementById("tasks").innerHTML=null;
      setTimeout(function() {reInitHomePage(); }, 100) ;
 });  
-
-
 
 function reInitHomePage(){ 
      myApp.showPreloader();
@@ -68,24 +68,23 @@ function reInitHomePage(){
               myApp.alert("error occured in the system");
         }
     });   
-}
-var mainView = myApp.addView('.view-main', {
-  dynamicNavbar: true,
-     domCache: true
-});
+};
+
+
 function saveFirstConfig(){
     ip = document.getElementById('ipFirstConfig').value,
     port = document.getElementById('portFirstConfig').value;
-    sessionStorage.setItem('Ip_config', ip);
-    sessionStorage.setItem('Ip_port', port);
+    //sessionStorage.setItem('Ip_config', ip);
+    //sessionStorage.setItem('Ip_port', port);
+    saveWsConfiguration(ip,port);
     myApp.closeModal();
-}       
+};       
 function loadJSFile(screenName){
     var js = document.createElement("script");
     js.type = "text/javascript";    
     js.src = screenName;
     document.body.appendChild(js);
-}
+};
 function verifConfig(){          
    // manageDB();
     //getWSConfiguration();
@@ -93,14 +92,21 @@ function verifConfig(){
     ip_port=sessionStorage.getItem("Ip_port");
     if(ip_config===null || ip_port===null)
       myApp.loginScreen();    
-}    
+};  
+
+function verifDeviceConfig()
+{
+    manageDB();
+    getWsConfiguration();
+};
 var leftView=myApp.addView('.view-left',{
     domCache: true,dynamicNavbar:true
    });
 myApp.onPageInit('home', function (page) { 
      HomeBackButton=document.getElementById("homeBackButton");
      myApp.params.swipePanel=false;
-    verifConfig();      
+    //verifConfig();    
+    verifDeviceConfig();
     
 }).trigger();                       
 myApp.onPageInit('WSConfigurationScreen', function (page) {
@@ -164,30 +170,30 @@ myApp.onPageInit('searchResultScreen', function (page) {
 function setTemplate_HeaderData(pScreen){
     document.getElementById("userName_label"+"_"+pScreen).textContent=sessionStorage.getItem('userName');
      document.getElementById("lng_label"+"_"+pScreen).textContent=sessionStorage.getItem('language');
-}  
+};  
 
 function loadsearchScreen(){
     GetSearchPage('http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetSearchScreen/'+currentItem);
    
-}       
+};       
  function loadTaskList() {
      tasks=document.getElementById('tasks');
      var deviceWidth = window.innerWidth - 50;
       GetHomePage('http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/getHomePage');  
-}
+};
      
 function loadNewInputPage(){
     currentItem=currentItem.toLowerCase();
 
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetNewInputScreen/'+currentItem;
     GetNewInputScreen(url);
-}  
+};  
 
 function loadEditScreen(itemId)
 {
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetEditScreen/'+currentItem+'/'+itemId;
     GetEditScreen(url);
-} 
+}; 
 
 function GetEditScreen(url){
    
@@ -204,7 +210,7 @@ function GetEditScreen(url){
                        myApp.alert("error occured");      
                     }   
             });     
-}  
+};  
                 
 function GetNewInputScreen(url){
     $.ajax({ 
@@ -225,7 +231,7 @@ function GetNewInputScreen(url){
                           
                     }    
             });       
-}
+};
 
 
 
@@ -247,7 +253,7 @@ function GetSearchPage(url){
                     }  
                  
             });    
-}
+};
     
 function GenerateResponseArray(element){ 
    var res = element.split(",");
@@ -261,13 +267,13 @@ function GenerateResponseArray(element){
       }
     }
     return result;        
-} 
+}; 
 
 function setUser_ShortName(userShortName){
     var res = userShortName.split('\\');
     return res[0]+'\\\\'+res[1];
     
-}  
+};  
  
 function GetHomePage(url) {
    
@@ -316,7 +322,7 @@ function GetHomePage(url) {
         }
     });          
              
-}  
+};  
 function createLanguagesList(screen){
     $$('.create-language-links-'+screen).on('click', function () {
   var clickedLink = this;
@@ -337,7 +343,7 @@ function createLanguagesList(screen){
                     '</div>'
   myApp.popover(popoverHTML, clickedLink); 
 });
-}  
+};  
 
 function createLogoutPopover(screen){
     $$('.create-profile-links-'+screen).on('click', function () {
@@ -357,13 +363,13 @@ function createLogoutPopover(screen){
                     '</div>'
   myApp.popover(popoverHTML, clickedLink);
 });
-}  
+};  
          
 function logoutAction(){
             sessionStorage.clear();        
         mainView.router.load({url: 'index.html'});
         location.reload(true);
-}
+};
 function lunchSearchResult(url){         
     
      var data="{"+    
@@ -401,12 +407,12 @@ function lunchSearchResult(url){
                          
         }                           
     });    
-}         
+};         
 function generateConnectedComboItems(idChild,screenTagName,val,child,entity){ 
     var url =  "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/ConnectedComboOptions/"+val.value+"/"+screenTagName+"/"+child+"/"+entity;
     setTimeout(function() {connectedComboOptions(url,idChild);},100);       
 
-}
+};
    
 function connectedComboOptions(url,idChild) {
     $.ajax({ 
@@ -420,9 +426,59 @@ function connectedComboOptions(url,idChild) {
                         console.log(errorThrown+'  in processing!'+textStatus);
                     }                
             });        
-}
+};
 function HomeBack(){
     HomeBackButton.style.visibility="hidden";       
     mainView.router.back({force:true,pageName:"homePage"});   
     
-}
+};
+
+function manageDB()
+{
+     db.transaction(function(tx) {
+                  tx.executeSql('Create Table  IF NOT EXISTS WSConfiguration (id REAL UNIQUE,ip, port)');
+              });
+};
+   
+function getWsConfiguration(){
+           db.transaction(function (t) {
+       t.executeSql('SELECT * FROM WSConfiguration', [], function (t, r)
+                    {
+          var len = r.rows.length;            
+           if(len!=0)
+               {
+           var ip=r.rows.item(0).ip;
+           var port=r.rows.item(0).port;    
+           sessionStorage.setItem('Ip_config', ip);
+           sessionStorage.setItem('Ip_port', port);        
+               }
+           else
+               {
+                  myApp.loginScreen();
+               }
+    }, null)
+  });
+};
+
+function onError(tx, error) {
+   myApp.alert(error.message);
+ };
+
+function saveWsConfiguration(ip,port)
+{    
+           db.transaction(function (t) {
+       t.executeSql('INSERT INTO WSConfiguration (id,ip,port) VALUES (1,"'+ip+'","'+port+'")');
+  });
+   
+    
+    sessionStorage.setItem('Ip_config', ip);
+    sessionStorage.setItem('Ip_port', port);
+};
+function updateWsConfiguration(ip,port)
+{
+           db.transaction(function (t) {
+       t.executeSql('Update WSConfiguration SET ip="'+ip+'" , port="'+port+'" where id=1');
+  });
+       sessionStorage.setItem('Ip_config', ip);
+    sessionStorage.setItem('Ip_port', port);   
+};

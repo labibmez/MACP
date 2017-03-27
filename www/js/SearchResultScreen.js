@@ -52,13 +52,14 @@ function startWorkflowFromSearchGrid(itemId){
     var  GroupsList=GenerateResponseArray(sessionStorage.getItem("GroupsList")); 
      ProfilesList=JSON.stringify(ProfilesList); 
      GroupsList =JSON.stringify(GroupsList);   
-     
+     var popupWidth=window.innerWidth*0.8;
+    popupWidth=Math.floor(popupWidth);
      var data="{"+          
         "\"entityName\":\""+currentItem+"\","+  
         "\"itemId\":\""+itemId+"\"," +
         "\"profilesList\":"+ProfilesList+","+
         "\"groupsList\":"+GroupsList+","+   
-        "\"popupWidth\":\""+900+"\","+
+        "\"popupWidth\":\""+popupWidth+"\","+
         "\"popupHeight\":\""+470+"\"}";    
     console.log("SearchParams",data);                
     $.ajax({             
@@ -108,7 +109,7 @@ function manageStartWorkFlowResponse(data){
                   else
                         {
                             myApp.hidePreloader();
-                            myApp.popup('<div class="popup" style="width:90% !important; top:50% !important; left:35% !important; right:20% !important;  position:absoloute !important" >'+data.Content+'</div>', true);
+                            myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important" >'+data.Content+'</div>', true);
                         }
                     break;
                 }

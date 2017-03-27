@@ -62,7 +62,6 @@ $$('.newInput-form-to-data').on('click', function(){
         var formData = myApp.formToData('#my-newInput-form');
         parameters=JSON.stringify(formData);
         saveNewInput(parameters);
-       // myApp.alert(searchParams);
     }
 });
 
@@ -85,7 +84,8 @@ function saveNewInput(parameters)
             myApp.hidePreloader();
             if(data.status==="ok")
                 {
-                    myApp.alert("successful");
+                    itemId=data.itemId;
+                     mainView.router.load({url: "editScreen.html",reload:true});
                 }
             else
                 {
