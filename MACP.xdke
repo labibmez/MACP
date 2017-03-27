@@ -17,6 +17,7 @@
         "id": "tinyhippos-geosettings",
         "key": "geosettings",
         "value": "{\"position\":{\"latitude\":43.46518699999994,\"longitude\":-80.52237200000009,\"altitude\":100,\"accuracy\":150,\"altitudeAccuracy\":80,\"heading\":0,\"speed\":0,\"timeStamp\":\"new Date(1490381080980)\"},\"delay\":\"0\",\"timeout\":false}",
+
         "prefix": "tinyhippos-"
       },
       "tinyhippos-geo-map-zoom-key": {

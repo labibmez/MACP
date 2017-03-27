@@ -1,9 +1,17 @@
-function calendarDateFormat(cssClass,idComponent)
+function calendarDateFormat(cssClass,idComponent,year,month,day)
 {
+    if(year ===0)
+    {
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth();
+    var year = today.getFullYear();
+    }
    myApp.calendar({    
     input: '#'+idComponent,    
     dateFormat: cssClass,
-    closeOnSelect : true
+    closeOnSelect : false,
+    value : [new Date(year,month,day)]
 }); 
 }
 
@@ -17,7 +25,7 @@ function AmountFormat(elementId,decimalprecision,groupseparator,decimalseparator
     element.value= output;
         }
     
-};
+}; 
 
 function NumericFormat(elementId,groupSeparator)
 {
