@@ -1,12 +1,14 @@
+var divId;
 function loadScreen(divID)
 {
+    divId=divID;
        myApp.showPreloader();
             $.ajax({ 
                     type: "GET", 
                     dataType:"json",   
                     url: "http://192.168.1.47:92/MobileAPI.svc/GetRelatedItemScreen/"+divID+"/"+itemId+"/244",
                     success: function(data) { 
-                        myApp.popup('<div class="popup" style="width:90% !important; top:50% !important; left:35% !important; right:20% !important;  position:absoloute !important; background : #f1f1f1 !important;" >'+data.content+'</div>', true);
+                        myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
                                                 loadJSFile("js/EditScreen.js");
  
                         myApp.hidePreloader();
@@ -104,8 +106,6 @@ $$('.edit-relatedItem-form-to-data').on('click', function(){
     var i;
     var indexToSelect=1;
     var isValid = true;
-            myApp.alert("click");
-
     var textBox=$("form div.requiredItem.textbox input" )
     
     for (i = 0; i < textBox.length; i++) 
@@ -166,12 +166,52 @@ $$('.edit-relatedItem-form-to-data').on('click', function(){
     {
         var formData = myApp.formToData('#my-relatedItem-form');
         parameters=JSON.stringify(formData);
-        myApp.alert(parameters);
-   
-      // UpdateItem(parameters);
+            setTimeout(function() { UpdateRelatedItem(parameters); }, 1000) ;
+
+       
     }
 });
 
+function UpdateRelatedItem(parameters)
+{
+     var data="{"+  
+        "\"mainItemId\":\""+itemId+"\","+
+        "\"relatedItemId\":\"244\","+
+        "\"screenName\":\""+divId+"\","+ 
+        "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +
+        "\"parameters\":"+parameters+"}";  
+     myApp.showPreloader();
+     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/SaveRelatedItem';
+
+     $.ajax({             
+        type: 'POST',           
+        url: url,                  
+        contentType: "text/plain",                           
+        dataType: "json",                            
+        data: data,             
+        success: function(data) {     
+            
+            if(data.status==="ok")
+                {
+                    myApp.hidePreloader();
+                    myApp.alert("successful");
+                }
+            else 
+                { 
+                    myApp.hidePreloader();
+                    myApp.alert("error saving");
+                }
+        },
+        error: function(e) {         
+             
+            console.log(e.message);  
+            verifconnexion = false;        
+            myApp.hidePreloader(); 
+      
+                             
+        }                           
+    }); 
+}
 
 function UpdateItem(parameters)
 {
