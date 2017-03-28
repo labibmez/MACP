@@ -1,5 +1,5 @@
 var divId;
-function loadScreen(divID)
+function loadRelatedItemPopup(divID)
 {
     divId=divID;
        myApp.showPreloader();
@@ -18,18 +18,41 @@ function loadScreen(divID)
                     }   
             });   
 }
-function menuTabClick(divID,butDiv)
-{           
-    $("button").siblings(".selectedTab").removeClass('selectedTab');
+
+function loadScreen(divID,screenEngine)
+{
+    divId=divID;
+       myApp.showPreloader();
+            $.ajax({ 
+                    type: "GET", 
+                    dataType:"json",   
+                    url: "http://192.168.1.47:92/MobileAPI.svc/GetEditTabFrame/"+divID+"/"+itemId+"/"+screenEngine,
+                    success: function(data) { 
+                        document.getElementById(divID).innerHTML=data.content;                    
+                        loadJSFile("js/EditScreen.js");   
+                        myApp.hidePreloader();
+                    }, 
+                    error: function(e) {
+                       myApp.alert("error occured");      
+                    }   
+            });   
+}
+
+
+function menuTabClick(divID,butDiv,screenEngine)
+{                
+    $("button").siblings(".selectedTab").removeClass('selectedTab');                
     $('#'+butDiv).addClass('selectedTab');   
-    if(!($('#'+butDiv).hasClass('loaded')))
+    if(!($('#'+butDiv).hasClass('loaded')))  
     {
         $('#'+butDiv).addClass('loaded');                                                   
-        document.getElementById(divID).innerHTML="<button onclick='loadScreen(\""+divID+"\")'>"+divID+"</button>";
-
+        document.getElementById(divID).innerHTML="<button style='margin : 100px !important;' onclick='loadRelatedItemPopup(\""+divID+"\")'>"+screenEngine+"</button>";
+        loadScreen(divID,screenEngine);
     }
     $("div").siblings(".Active").removeClass('Active');
-    $('#'+divID).addClass('Active');           
+    $('#'+divID).addClass('Active');    
+   
+    
 }
 
 $$('.edit-mainData-form-to-data').on('click', function(){
