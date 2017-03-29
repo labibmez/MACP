@@ -4,7 +4,7 @@ var selectedItem;
 var lastIndex = 30; 
 // Max items to load
 var maxItems = 120;
-
+var SearchResultScreen_JSFlag;
 var itemId;
  
 // Append items per load

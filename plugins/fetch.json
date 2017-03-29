@@ -9,16 +9,16 @@
     },
     "cordova-plugin-splashscreen": {
         "source": {
-            "type": "local",
-            "path": "C:\\Users\\MedMTriki\\AppData\\Local\\Intel\\XDK\\xdk\\components\\server\\cordova\\cordova-plugins\\cordova-plugin-splashscreen"
+            "type": "registry",
+            "id": "cordova-plugin-splashscreen@2.1.0"
         },
         "is_top_level": true,
         "variables": {}
     },
     "cordova-plugin-statusbar": {
         "source": {
-            "type": "local",
-            "path": "C:\\Users\\MedMTriki\\AppData\\Local\\Intel\\XDK\\xdk\\components\\server\\cordova\\cordova-plugins\\cordova-plugin-statusbar"
+            "type": "registry",
+            "id": "cordova-plugin-statusbar@2.0.0"
         },
         "is_top_level": true,
         "variables": {}

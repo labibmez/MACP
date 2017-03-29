@@ -1,3 +1,5 @@
+var NewInputScreen_JSFlag;
+
 $$('.newInput-form-to-data').on('click', function(){
     var i;
     var indexToSelect=1;
@@ -84,7 +86,7 @@ function saveNewInput(parameters)
             myApp.hidePreloader();
             if(data.status==="ok")
                 {
-                    itemId=data.itemId;
+                    itemId=data.itemId; 
                      mainView.router.load({url: "editScreen.html",reload:true});
                 }
             else

@@ -1,9 +1,11 @@
 var divId;
+var EditScreen_JSFlag;
 var engine;
 var relatedItemId;
 function loadRelatedItemPopup(id)
 { 
   relatedItemId=id;
+
        myApp.showPreloader();
             $.ajax({ 
                     type: "GET", 
@@ -271,6 +273,7 @@ function UpdateItem(parameters)
             myApp.hidePreloader();
             if(data.status==="ok")
                 {
+                    
                     myApp.alert("successful");
                 }
             else

@@ -17,8 +17,6 @@
 #         under the License.
 -->
 
-[![Build Status](https://travis-ci.org/apache/cordova-plugin-statusbar.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-statusbar)
-
 # cordova-plugin-statusbar
 
 StatusBar
