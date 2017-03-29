@@ -10,7 +10,7 @@ function loadRelatedItemPopup(id)
             $.ajax({ 
                     type: "GET", 
                     dataType:"json",   
-                    url: "http://192.168.1.47:92/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
+                    url: "http://"+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
                     success: function(data) { 
                         myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
                         loadJSFile("js/EditScreen.js"); 
@@ -32,7 +32,7 @@ function loadScreen(divID,screenEngine)
        myApp.showPreloader();
             $.ajax({ 
                     type: "POST", 
-                    url: "http://192.168.1.47:92/MobileAPI.svc/GetLoadEditTabFrame",
+                    url: "http://"+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetLoadEditTabFrame",
                     contentType: "text/plain",                          
                     dataType: "json",                      
                     data: data, 
@@ -234,7 +234,8 @@ function UpdateRelatedItem(parameters)
                         loadScreen(divId,engine);
 
                         });
-                   
+ myApp.closeModal(".popup",true);
+                                           
                 }
             else 
                 { 
