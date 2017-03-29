@@ -10,7 +10,7 @@ var currentItem;
 var searchParams;
 var HomeBackButton;
 var myApp=new Framework7({ swipeBackPage : false,statusbarOverlay:true}) ;
-var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024);
+var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
      domCache: true
@@ -85,9 +85,7 @@ function loadJSFile(screenName){
     js.src = screenName;
     document.body.appendChild(js);
 };
-function verifConfig(){          
-   // manageDB();
-    //getWSConfiguration();
+function verifConfig(){      
     ip_config=sessionStorage.getItem("Ip_config");
     ip_port=sessionStorage.getItem("Ip_port");
     if(ip_config===null || ip_port===null)
@@ -105,8 +103,8 @@ var leftView=myApp.addView('.view-left',{
 myApp.onPageInit('home', function (page) { 
      HomeBackButton=document.getElementById("homeBackButton");
      myApp.params.swipePanel=false;
-    //verifConfig();    
-    verifDeviceConfig();
+    verifConfig();    
+    //verifDeviceConfig();
     
 }).trigger();                       
 myApp.onPageInit('WSConfigurationScreen', function (page) {
@@ -191,16 +189,25 @@ function loadNewInputPage(){
 
 function loadEditScreen(itemId)
 {
-    var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetEditScreen/'+currentItem+'/'+itemId;
-    GetEditScreen(url);
+    var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetEditScreen';
+    GetEditScreen(url,itemId);
 }; 
 
-function GetEditScreen(url){
-   
+function GetEditScreen(url,itemId){ 
+     var data="{"+            
+        "\"screenName\":\""+currentItem+"\","+
+        "\"mainItemId\":\""+itemId+"\"," +
+        "\"screenEngine\":\"empty\","+
+        "\"screenWidth\":\""+window.innerWidth+"\"," +
+        "\"screenHeight\":\""+window.innerHeight+"\"}";  
+    
     $.ajax({ 
-                    type: "GET", 
+                    type: "POST", 
                     dataType:"json",  
                     url: url,
+                    contentType: "text/plain",                          
+                    dataType: "json",                      
+                    data: data, 
                     success: function(data) { 
                         document.getElementById("editScreenForm").innerHTML=data.content;
                         loadJSFile("js/EditScreen.js");

@@ -1,16 +1,17 @@
 var divId;
-function loadRelatedItemPopup(divID)
-{
-    divId=divID;
+var engine;
+var relatedItemId;
+function loadRelatedItemPopup(id)
+{ 
+  relatedItemId=id;
        myApp.showPreloader();
             $.ajax({ 
                     type: "GET", 
                     dataType:"json",   
-                    url: "http://192.168.1.47:92/MobileAPI.svc/GetRelatedItemScreen/"+divID+"/"+itemId+"/244",
+                    url: "http://192.168.1.47:92/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
                     success: function(data) { 
                         myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
-                                                loadJSFile("js/EditScreen.js");
- 
+                        loadJSFile("js/EditScreen.js"); 
                         myApp.hidePreloader();
                     }, 
                     error: function(e) {
@@ -18,41 +19,51 @@ function loadRelatedItemPopup(divID)
                     }   
             });   
 }
-
 function loadScreen(divID,screenEngine)
 {
-    divId=divID;
+     var data="{"+            
+        "\"screenName\":\""+divId+"\","+
+        "\"mainItemId\":\""+itemId+"\"," +
+        "\"screenEngine\":\""+screenEngine+"\","+
+        "\"screenWidth\":\""+window.innerWidth+"\"," +
+        "\"screenHeight\":\""+window.innerHeight+"\"}"; 
        myApp.showPreloader();
             $.ajax({ 
-                    type: "GET", 
-                    dataType:"json",   
-                    url: "http://192.168.1.47:92/MobileAPI.svc/GetEditTabFrame/"+divID+"/"+itemId+"/"+screenEngine,
+                    type: "POST", 
+                    url: "http://192.168.1.47:92/MobileAPI.svc/GetLoadEditTabFrame",
+                    contentType: "text/plain",                          
+                    dataType: "json",                      
+                    data: data, 
                     success: function(data) { 
-                        document.getElementById(divID).innerHTML=data.content;                    
+                        document.getElementById(divID).innerHTML=data.content;                     
                         loadJSFile("js/EditScreen.js");   
                         myApp.hidePreloader();
-                    }, 
+
+                    },   
                     error: function(e) {
-                       myApp.alert("error occured");      
+                       myApp.alert("error occured"+e);          
+     
+            myApp.hidePreloader();  
                     }   
             });   
 }
 
 
 function menuTabClick(divID,butDiv,screenEngine)
-{                
+{         
+    divId=divID;
+    engine=screenEngine;
     $("button").siblings(".selectedTab").removeClass('selectedTab');                
     $('#'+butDiv).addClass('selectedTab');   
     if(!($('#'+butDiv).hasClass('loaded')))  
     {
-        $('#'+butDiv).addClass('loaded');                                                   
-        document.getElementById(divID).innerHTML="<button style='margin : 100px !important;' onclick='loadRelatedItemPopup(\""+divID+"\")'>"+screenEngine+"</button>";
+        $('#'+butDiv).addClass('loaded');             
         loadScreen(divID,screenEngine);
     }
     $("div").siblings(".Active").removeClass('Active');
     $('#'+divID).addClass('Active');    
    
-    
+         
 }
 
 $$('.edit-mainData-form-to-data').on('click', function(){
@@ -187,9 +198,9 @@ $$('.edit-relatedItem-form-to-data').on('click', function(){
        $(x[indexToSelect]).next().children().first().focus();
     }else
     {
-        var formData = myApp.formToData('#my-relatedItem-form');
-        parameters=JSON.stringify(formData);
-            setTimeout(function() { UpdateRelatedItem(parameters); }, 1000) ;
+        var formData = myApp.formToData('#my-relatedItemPopup-form');
+        parameters=JSON.stringify(formData);        
+        setTimeout(function() { UpdateRelatedItem(parameters); }, 1000) ;
 
        
     }
@@ -199,7 +210,7 @@ function UpdateRelatedItem(parameters)
 {
      var data="{"+  
         "\"mainItemId\":\""+itemId+"\","+
-        "\"relatedItemId\":\"244\","+
+        "\"relatedItemId\":\""+relatedItemId+"\","+
         "\"screenName\":\""+divId+"\","+ 
         "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +
         "\"parameters\":"+parameters+"}";  
@@ -217,7 +228,11 @@ function UpdateRelatedItem(parameters)
             if(data.status==="ok")
                 {
                     myApp.hidePreloader();
-                    myApp.alert("successful");
+                        myApp.alert('successful', function () {
+                        loadScreen(divId,engine);
+
+                        });
+                   
                 }
             else 
                 { 
