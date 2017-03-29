@@ -1,5 +1,5 @@
 var loading = false;
- 
+var infiniteScroll_JSFlag; 
 // Last loaded index
 var lastIndex = 30;
  

@@ -1,14 +1,6 @@
 
-/*$$('.form-to-data').on('click', function(){
-   
-  var formData = myApp.formToData('#my-form');
-       searchParams=JSON.stringify(formData);
-      //mainView.router.load({url: 'searchResultScreen.html',reload:true});
-      mainView.router.load({url: 'searchResultScreen.html',reload:false,ignoreCache:true});
-    
-});  */             
-     
-
+        
+ var SearchScreen_JSFlag;    
 
 $$('.search-form-to-data').on('click', function(){
     var i;

@@ -1,4 +1,5 @@
 var divId;
+var EditScreen_JSFlag;
 function loadScreen(divID)
 {
     divId=divID;
@@ -233,6 +234,7 @@ function UpdateItem(parameters)
             myApp.hidePreloader();
             if(data.status==="ok")
                 {
+                    
                     myApp.alert("successful");
                 }
             else

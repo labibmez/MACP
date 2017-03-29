@@ -18,6 +18,8 @@
  *
  */
 
+var cordova = require('cordova');
+
 function notSupported() {
     console.log('StatusBar is not supported');
     return false;
@@ -30,7 +32,11 @@ module.exports = {
     styleLightContent:notSupported,
     styleBlackOpaque:notSupported,
     overlaysWebView:notSupported,
+    overlaysWebView: notSupported,
+    styleDefault: notSupported,
     styleLightContect: notSupported,
+    styleBlackTranslucent: notSupported,
+    styleBlackOpaque: notSupported,
     backgroundColorByName: notSupported,
     backgroundColorByHexString: notSupported,
     hide: notSupported,

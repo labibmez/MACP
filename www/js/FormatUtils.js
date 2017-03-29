@@ -1,3 +1,6 @@
+var ForematUtils_JSFlag;
+
+
 function calendarDateFormat(cssClass,idComponent,year,month,day)
 {
     if(year ===0)

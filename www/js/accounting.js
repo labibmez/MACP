@@ -8,6 +8,7 @@
  * Full details and documentation:
  * http://openexchangerates.github.io/accounting.js/
  */
+var accounting_JSFlag;
 
 (function(root, undefined) {
 
@@ -280,7 +281,7 @@
 			return map(number, function(val){
 				return formatMoney(val, symbol, precision, thousand, decimal, format);
 			});
-		}
+		}       
 
 		// Clean up number:
 		number = unformat(number);
