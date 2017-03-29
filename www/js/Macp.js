@@ -10,7 +10,7 @@ var currentItem;
 var searchParams;
 var HomeBackButton;
 var myApp=new Framework7({ swipeBackPage : false,statusbarOverlay:true}) ;
-var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024);
+var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
      domCache: true
@@ -115,8 +115,7 @@ function isScriptAlreadyIncluded(src){
        if(scripts[i].getAttribute('src') == src) return true;
     return false;
 }
-
-function verifConfig(){          
+function verifConfig(){    
     ip_config=sessionStorage.getItem("Ip_config");
     ip_port=sessionStorage.getItem("Ip_port");
     if(ip_config===null || ip_port===null)
@@ -134,7 +133,7 @@ var leftView=myApp.addView('.view-left',{
 myApp.onPageInit('home', function (page) { 
      HomeBackButton=document.getElementById("homeBackButton");
      myApp.params.swipePanel=false;
-    verifConfig();    
+    verifConfig();
     //verifDeviceConfig();    
     
 }).trigger();                       
@@ -223,17 +222,29 @@ function loadNewInputPage(){
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetNewInputScreen/'+currentItem;
     GetNewInputScreen(url);
 };  
-function loadEditScreen(itemId){
-    var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetEditScreen/'+currentItem+'/'+itemId;
-    GetEditScreen(url);
+
+
+function loadEditScreen(itemId)
+{
+    var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetEditScreen';
+    GetEditScreen(url,itemId);
 }; 
 
-function GetEditScreen(url){
-   
+function GetEditScreen(url,itemId){ 
+     var data="{"+            
+        "\"screenName\":\""+currentItem+"\","+
+        "\"mainItemId\":\""+itemId+"\"," +
+        "\"screenEngine\":\"empty\","+
+        "\"screenWidth\":\""+window.innerWidth+"\"," +
+        "\"screenHeight\":\""+window.innerHeight+"\"}";  
+    
     $.ajax({ 
-                    type: "GET", 
+                    type: "POST", 
                     dataType:"json",  
                     url: url,
+                    contentType: "text/plain",                          
+                    dataType: "json",                      
+                    data: data, 
                     success: function(data) { 
                         document.getElementById("editScreenForm").innerHTML=data.content;
                         loadJSFile("js/EditScreen.js");
