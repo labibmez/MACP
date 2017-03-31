@@ -2,9 +2,11 @@ var divId;
 var EditScreen_JSFlag;
 var engine;
 var relatedItemId;
-function loadRelatedItemPopup(id)
+var isDuplicate;
+function loadRelatedItemPopup(id,isDuplicateAction)
 { 
-  relatedItemId=id;
+       relatedItemId=id;
+       isDuplicate=isDuplicateAction;
 
        myApp.showPreloader();
             $.ajax({ 
@@ -177,7 +179,7 @@ $$('.edit-mainData-form-to-data').on('click', function(){
 
 
 
-$$('.edit-relatedItem-form-to-data').on('click', function(){
+function testclick(msg){
     var i;
     var indexToSelect=1;
     var isValid = true;
@@ -241,17 +243,20 @@ $$('.edit-relatedItem-form-to-data').on('click', function(){
     {
         var formData = myApp.formToData('#my-relatedItemPopup-form');
         parameters=JSON.stringify(formData);        
-        setTimeout(function() { UpdateRelatedItem(parameters); }, 1000) ;
+        setTimeout(function() { UpdateRelatedItem(parameters,msg); }, 1000) ;
 
        
     }
-});
+}
 
-function UpdateRelatedItem(parameters)
+function UpdateRelatedItem(parameters,msg)
 {
+    var updateId = relatedItemId;    
+    if(isDuplicate==="isDuplicate")
+        updateId=0;
      var data="{"+  
         "\"mainItemId\":\""+itemId+"\","+
-        "\"relatedItemId\":\""+relatedItemId+"\","+
+        "\"relatedItemId\":\""+updateId+"\","+
         "\"screenName\":\""+divId+"\","+ 
         "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +
         "\"parameters\":"+parameters+"}";  
@@ -269,7 +274,7 @@ function UpdateRelatedItem(parameters)
             if(data.status==="ok")
                 {
                     myApp.hidePreloader();
-                        myApp.alert('successful', function () {
+                        myApp.alert(msg, function () {
                         loadScreen(divId,engine);
 
                         });
@@ -295,6 +300,7 @@ function UpdateRelatedItem(parameters)
 
 function UpdateItem(parameters)
 {
+
       var data="{"+  
         "\"mainItemId\":\""+itemId+"\","+
         "\"screenName\":\""+currentItem+"\","+
