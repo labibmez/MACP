@@ -23,6 +23,7 @@ function loadRelatedItemPopup(id,isDuplicateAction)
                     }   
             });   
 }
+
 function loadScreen(divID,screenEngine)     
 {
      var data="{"+             
@@ -51,7 +52,7 @@ function loadScreen(divID,screenEngine)
                     }   
             });   
 }
-
+           
 function deleteRelatedItem(id, culture, confirmationMessage)
 {
         myApp.confirm(confirmationMessage, function () { 
@@ -108,6 +109,12 @@ function menuTabClick(divID,butDiv,screenEngine)
    
          
 }
+
+$$('.startWF-From-Edit-Screen-form-to-data').on('click', function(){
+    
+    startWorkflow_ButtonAction(itemId);
+});
+
 
 $$('.edit-mainData-form-to-data').on('click', function(){
     var i;

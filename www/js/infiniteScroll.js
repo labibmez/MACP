@@ -3,8 +3,6 @@ var infiniteScroll_JSFlag;
 // Last loaded index
 var lastIndex = 30;
  
-// Max items to load
-var maxItems = totalRowNumber;
  
 // Append items per load
 var itemsPerLoad = 10;
@@ -21,7 +19,7 @@ $$('.infinite-scroll').on('infinite', function () {
     // Reset loading flag
     loading = false;
     var url='http://'+ sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetNextSearchResult';
-    if (lastIndex >= maxItems) {
+    if (lastIndex >= totalRowNumber) {
       myApp.detachInfiniteScroll($$('.infinite-scroll'));
       $$('.infinite-scroll-preloader').remove();
       return;
