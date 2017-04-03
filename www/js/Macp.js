@@ -133,8 +133,8 @@ var leftView=myApp.addView('.view-left',{
 myApp.onPageInit('home', function (page) { 
      HomeBackButton=document.getElementById("homeBackButton");
      myApp.params.swipePanel=false;
-    verifConfig();
-    //verifDeviceConfig();    
+   // verifConfig();
+    verifDeviceConfig();    
     
 }).trigger();                       
 myApp.onPageInit('WSConfigurationScreen', function (page) {
@@ -187,7 +187,6 @@ myApp.onPageInit('newInputScreen', function (page) {
     myApp.showPreloader();
     setTemplate_HeaderData('newInputScreen');
     setTimeout(function() {loadNewInputPage(); }, 1000) ;
-    myApp.alert(mainView.history.length);
 });              
 myApp.onPageInit('searchResultScreen', function (page) {
     HomeBackButton.style.visibility="visible";
@@ -233,7 +232,7 @@ function loadEditScreen(itemId)
 function GetEditScreen(url,itemId){ 
      var data="{"+            
         "\"screenName\":\""+currentItem+"\","+
-        "\"mainItemId\":\""+itemId+"\"," +
+        "\"mainItemId\":\""+itemId+"\"," +  
         "\"screenEngine\":\"empty\","+
         "\"screenWidth\":\""+window.innerWidth+"\"," +
         "\"screenHeight\":\""+window.innerHeight+"\"}";  
@@ -246,14 +245,18 @@ function GetEditScreen(url,itemId){
                     dataType: "json",                      
                     data: data, 
                     success: function(data) { 
+                        console.log(data);
                         document.getElementById("editScreenForm").innerHTML=data.content;
+                         $('#edit-toolbarContent').append(data.StarWFButton);
+                        $('#edit-toolbarContent').append(data.Savebutton);
                         loadJSFile("js/EditScreen.js");
+                        loadJSFile("js/WorkflowManager");
                          myApp.hidePreloader();
                     },
                     error: function(e) {
                        myApp.alert("error occured");      
                     }   
-            });     
+            });         
 };                
 function GetNewInputScreen(url){
     $.ajax({ 
@@ -273,7 +276,7 @@ function GetNewInputScreen(url){
                        myApp.alert("error occured");
                           
                     }    
-            });       
+            });         
 };
 function GetSearchPage(url){ 
     $.ajax({ 
@@ -421,12 +424,15 @@ function lunchSearchResult(url){
         contentType: "text/plain",                          
         dataType: "json",                            
         data: data,         
-        success: function(data) {     
+        success: function(data) {   
+            
             document.getElementById("searchResult").innerHTML=data.dataGrid;  
             totalRowNumber=data.TotalRows;
+            console.log(totalRowNumber);
              var tasksTableElement =document.getElementById("tasksTableElement");
              myApp.attachInfiniteScroll(tasksTableElement);
             loadJSFile("js/infiniteScroll.js");
+            loadJSFile("js/WorkflowManager.js");
             loadJSFile("js/SearchResultScreen.js");
             myApp.hidePreloader();
             

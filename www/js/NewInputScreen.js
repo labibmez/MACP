@@ -41,8 +41,8 @@ $$('.newInput-form-to-data').on('click', function(){
         else
         {
             $(comboBox[i]).closest("div.item-inner").removeClass("requiredIcon");
-        }            
-    }  
+        }              
+    }    
     var checkBox=$("form div.requiredItem.checkbox label.label-checkbox")
     for (i = 0; i < checkBox.length; i++)
     {
@@ -75,7 +75,7 @@ function saveNewInput(parameters)
         "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +
         "\"parameters\":"+parameters+"}";  
      myApp.showPreloader();
-     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/SaveNewInput';
+     var url="http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/SaveNewInput";
      $.ajax({             
         type: 'POST',           
         url: url,                  
@@ -89,7 +89,7 @@ function saveNewInput(parameters)
                     itemId=data.itemId; 
                      mainView.router.load({url: "editScreen.html",reload:true});
                 }
-            else
+            else  
                 {
                       myApp.alert("error saving");
                 }

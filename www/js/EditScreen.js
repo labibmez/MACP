@@ -10,7 +10,7 @@ function loadRelatedItemPopup(id)
             $.ajax({ 
                     type: "GET", 
                     dataType:"json",   
-                    url: "http://"+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
+                    url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
                     success: function(data) { 
                         myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
                         loadJSFile("js/EditScreen.js"); 
@@ -21,8 +21,7 @@ function loadRelatedItemPopup(id)
                     }   
             });   
 }
-function loadScreen(divID,screenEngine)
-{
+function loadScreen(divID,screenEngine){
      var data="{"+            
         "\"screenName\":\""+divId+"\","+
         "\"mainItemId\":\""+itemId+"\"," +
@@ -32,7 +31,7 @@ function loadScreen(divID,screenEngine)
        myApp.showPreloader();
             $.ajax({ 
                     type: "POST", 
-                    url: "http://"+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetLoadEditTabFrame",
+                    url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetLoadEditTabFrame",
                     contentType: "text/plain",                          
                     dataType: "json",                      
                     data: data, 
@@ -49,10 +48,9 @@ function loadScreen(divID,screenEngine)
                     }   
             });   
 }
+    
 
-
-function menuTabClick(divID,butDiv,screenEngine)
-{         
+function menuTabClick(divID,butDiv,screenEngine){         
     divId=divID;
     engine=screenEngine;
     $("button").siblings(".selectedTab").removeClass('selectedTab');                
@@ -67,6 +65,12 @@ function menuTabClick(divID,butDiv,screenEngine)
    
          
 }
+
+$$('.startWF-From-Edit-Screen-form-to-data').on('click', function(){
+    
+    startWorkflow_ButtonAction(itemId);
+});
+
 
 $$('.edit-mainData-form-to-data').on('click', function(){
     var i;
