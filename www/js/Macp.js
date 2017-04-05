@@ -170,7 +170,7 @@ myApp.onPageInit('editScreen', function (page) {
     myApp.params.swipePanel=false;
     myApp.showPreloader();
     pageTitleElement=document.getElementById("title_editScreen");
-    pageTitleElement.textContent=pageTitleContent;
+    pageTitleElement.textContent=itemRef;
     setTemplate_HeaderData('editScreen');
     setTimeout(function() {loadEditScreen(itemId); }, 1000) ;
     
@@ -269,6 +269,8 @@ function GetNewInputScreen(url){
                         document.getElementById("newInput-toolbarContent").innerHTML=data.button;
                         mainView.showToolbar();
                         loadJSFile("js/NewInputScreen.js");
+                        loadJSFile("js/FormatUtils.js");
+
                          myApp.hidePreloader();
                     },
                     error: function(e) {
