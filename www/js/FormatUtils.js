@@ -3,21 +3,24 @@ var ForematUtils_JSFlag;
 
 function calendarDateFormat(cssClass,idComponent,year,month,day)
 {
-    if(year ===0)
+    if(month ===-1)
     {
-    var today = new Date();
-    var day = today.getDate();
-    var month = today.getMonth();
-    var year = today.getFullYear();
-    }
+
+myApp.calendar({    
+    input: '#'+idComponent,    
+    dateFormat: cssClass,
+    closeOnSelect : false,
+    value : []
+}); 
+    }else{
    myApp.calendar({    
     input: '#'+idComponent,    
     dateFormat: cssClass,
     closeOnSelect : false,
     value : [new Date(year,month,day)]
-}); 
+}); }
 }
-
+   
 function AmountFormat(elementId,decimalprecision,groupseparator,decimalseparator)
 {
     var element = document.getElementById(elementId); 

@@ -269,6 +269,8 @@ function GetNewInputScreen(url){
                         document.getElementById("newInput-toolbarContent").innerHTML=data.button;
                         mainView.showToolbar();
                         loadJSFile("js/NewInputScreen.js");
+                        loadJSFile("js/FormatUtils.js");
+
                          myApp.hidePreloader();
                     },
                     error: function(e) {
