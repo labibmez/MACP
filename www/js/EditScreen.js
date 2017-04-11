@@ -1,7 +1,10 @@
 var divId;
 var EditScreen_JSFlag;
-var engine;
+var engine="classicms";
 var relatedItemId;
+var fileUploadedName;
+var fileData;
+var fileUploadedData;
 var isDuplicate;
 function loadRelatedItemPopup(id,isDuplicateAction)
 { 
@@ -24,8 +27,27 @@ function loadRelatedItemPopup(id,isDuplicateAction)
             });   
 }
 
-function loadScreen(divID,screenEngine)     
+
+function manageAttechementElement()
 {
+    document.getElementById("uploadBtn").onchange = function () {
+    document.getElementById("uploadFile").value = this.value;
+   var file=this.files[0];
+    fileUploadedName=file.name;
+   var reader  = new FileReader();
+     reader.onloadend = function(evt) {
+        console.log("read success");
+        console.log(evt.target.result);
+        fileUploadedData= evt.target.result.split(',')[1];
+    };
+    reader.readAsDataURL(file);
+} 
+            
+}   
+    
+
+
+function loadScreen(divID,screenEngine)     {
      var data="{"+             
         "\"screenName\":\""+divId+"\","+ 
         "\"mainItemId\":\""+itemId+"\"," +
@@ -33,7 +55,7 @@ function loadScreen(divID,screenEngine)
         "\"screenWidth\":\""+window.innerWidth+"\"," +
         "\"screenHeight\":\""+window.innerHeight+"\"}"; 
        myApp.showPreloader();
-            $.ajax({ 
+            $.ajax({    
                     type: "POST", 
                     url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetLoadEditTabFrame",
                     contentType: "text/plain",                          
@@ -41,8 +63,15 @@ function loadScreen(divID,screenEngine)
                     data: data, 
                     success: function(data) { 
                         document.getElementById(divID).innerHTML=data.content;                     
-                        loadJSFile("js/EditScreen.js");   
+                        //loadJSFile("js/EditScreen.js");   
                         myApp.hidePreloader();
+                        console.log(screenEngine);
+                        if(screenEngine==="attachement")
+                            {
+                               
+                                myApp.accordionOpen(".accordion-item");
+                                manageAttechementElement();
+                            }
 
                     },   
                     error: function(e) {
@@ -50,7 +79,7 @@ function loadScreen(divID,screenEngine)
      
             myApp.hidePreloader();  
                     }   
-            });   
+            });           
 }
            
 function deleteRelatedItem(id, culture, confirmationMessage)
@@ -60,8 +89,7 @@ function deleteRelatedItem(id, culture, confirmationMessage)
     });
 }
 
-function deleteItem(id,culture)
-{
+function deleteItem(id,culture){
          var data="{"+             
         "\"screenName\":\""+divId+"\","+
         "\"itemId\":\""+id+"\"," +
@@ -90,7 +118,7 @@ function deleteItem(id,culture)
      
             myApp.hidePreloader();  
                     }   
-            });   
+            });     
 }
 
 function menuTabClick(divID,butDiv,screenEngine)
@@ -103,12 +131,13 @@ function menuTabClick(divID,butDiv,screenEngine)
     {
         $('#'+butDiv).addClass('loaded');             
         loadScreen(divID,screenEngine);
+        
     }
     $("div").siblings(".Active").removeClass('Active');
     $('#'+divID).addClass('Active');    
-   
-         
+     
 }
+  
 
 $$('.startWF-From-Edit-Screen-form-to-data').on('click', function(){
     
@@ -176,15 +205,31 @@ $$('.edit-mainData-form-to-data').on('click', function(){
     if(!isValid)
     {
        $(x[indexToSelect]).next().children().first().focus();
-    }else
+    }
+    else
     {
-        var formData = myApp.formToData('#my-mainData-form');
-        parameters=JSON.stringify(formData);   
-        UpdateItem(parameters);
+        if(engine==="classicms")
+            {
+            mainData_SaveEvent();
+            }
+        else if(engine==="attachement")
+            {
+            attachement_SaveEvent();
+            }
     }
 });
 
+function mainData_SaveEvent()
+{
+     var formData = myApp.formToData('#my-mainData-form');
+        parameters=JSON.stringify(formData);   
+        UpdateItem(parameters);
+}
 
+function attachement_SaveEvent()
+{
+    setTimeout( uploadAttachementFile(),1000);
+}
 
 function testclick(msg){
     var i;
@@ -256,8 +301,7 @@ function testclick(msg){
     }
 }
 
-function UpdateRelatedItem(parameters,msg)
-{
+function UpdateRelatedItem(parameters,msg){
     var updateId = relatedItemId;    
     if(isDuplicate==="isDuplicate")
         updateId=0;
@@ -305,8 +349,52 @@ function UpdateRelatedItem(parameters,msg)
     }); 
 }
 
-function UpdateItem(parameters)
+function uploadAttachementFile()
 {
+  var formData = myApp.formToData('#my-attachment-form');
+        parameters=JSON.stringify(formData);
+        myApp.showPreloader();
+        var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/AttachFile';
+     var data="{"+  
+        "\"mainItemId\":\""+itemId+"\","+
+        "\"screenName\":\""+divId+"\","+ 
+        "\"fileName\":\""+fileUploadedName+"\","+ 
+        "\"fileData\":\""+fileUploadedData+"\","+ 
+        "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +
+        "\"userShortName\":\""+setUser_ShortName(sessionStorage.getItem("userShortName"))+"\"," +
+        "\"parameters\":"+parameters+"}";  
+  $.ajax({             
+        type: 'POST',           
+        url: url,                  
+        contentType: "text/plain",                           
+        dataType: "json",                            
+        data: data,             
+        success: function(data) {       
+            if(data.status==="ok")
+                {
+                    myApp.hidePreloader();
+                    loadScreen(divId,engine);                      
+                }
+            else 
+                { 
+                    myApp.hidePreloader();
+                    myApp.alert("error saving");
+                }
+        },
+        error: function(e) {         
+             
+            console.log(e.message);  
+            verifconnexion = false;        
+            myApp.hidePreloader();                  
+        }                           
+    });   
+     
+}
+function fileDetail()
+{
+    myApp.alert("clic");
+}
+function UpdateItem(parameters){
 
       var data="{"+  
         "\"mainItemId\":\""+itemId+"\","+
@@ -342,5 +430,61 @@ function UpdateItem(parameters)
                              
         }                           
     });    
-}   
+} 
+
+
+
+
+
+function downloadAsset(fileName) {
+  var assetURL = "https://raw.githubusercontent.com/cfjedimaster/Cordova-Examples/master/readme.md";  
+  var  store = cordova.file.dataDirectory;
+    var fileTransfer = new FileTransfer();
+    fileTransfer.download(assetURL, store + fileName, 
+        function(entry) {
+            console.log("Success!");  
+        }, 
+        function(err) {
+            console.log("Error");
+        });
+}  
+
+    /*
+       window.requestFileSystem(  
+                    LocalFileSystem.PERSISTENT, 0,  
+                    function onFileSystemSuccess(fileSystem) {  
+                    fileSystem.root.getFile(  
+                                fileName, {create: true, exclusive: false},  
+                                function gotFileEntry(fileEntry){  
+                                var sPath = fileEntry.fullPath.replace(fileName,"");  
+                                var fileTransfer = new FileTransfer();  
+                                fileEntry.remove();  
+                                fileTransfer.download(  
+                                           "http://www.w3.org/2011/web-apps-ws/papers/Nitobi.pdf",  
+                                           sPath + "theFile.pdf",  
+                                           function(theFile) {  
+                                           console.log("download complete: " + theFile.toURI());  
+                                           showLink(theFile.toURI());  
+                                           },  
+                                           function(error) {  
+                                           console.log("download error source " + error.source);  
+                                           console.log("download error target " + error.target);  
+                                           console.log("upload error code: " + error.code);  
+                                           }  
+                                           );  
+                                },  
+                                fail);  
+                    },  
+                    fail);  
+     }  
+       
+     function fail(evt) {  
+       console.log(evt.target.error.code);  
+     }  
+*/
+
+
+
+
+
  

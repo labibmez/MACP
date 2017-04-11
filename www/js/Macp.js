@@ -1,5 +1,6 @@
 var ip_config;
 var ip_port;
+var itemId;
 var tasks; 
 var totalRowNumber;
 var languagesList;
@@ -9,13 +10,18 @@ var pageTitleElement;
 var currentItem;
 var searchParams;
 var HomeBackButton;
+var stopWFMessage;
+var TaskId;
+var ExecutedWorkflowName;
 var myApp=new Framework7({ swipeBackPage : false,statusbarOverlay:true}) ;
-var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
+// var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
-     domCache: true
+    domCache :true
 });
-
+var leftView = myApp.addView('.view-left', {
+    dynamicNavbar: true
+});
 function isScreenInCache(screenName)
 {
     var history=mainView.history;
@@ -97,9 +103,9 @@ function reInitHomePage(){
 function saveFirstConfig(){
     ip = document.getElementById('ipFirstConfig').value,
     port = document.getElementById('portFirstConfig').value;
-    //sessionStorage.setItem('Ip_config', ip);
-    //sessionStorage.setItem('Ip_port', port);
-    saveWsConfiguration(ip,port);
+    sessionStorage.setItem('Ip_config', ip);
+    sessionStorage.setItem('Ip_port', port);
+  //  saveWsConfiguration(ip,port);
     myApp.closeModal();
 };       
 function loadJSFile(screenName){
@@ -119,22 +125,24 @@ function verifConfig(){
     ip_config=sessionStorage.getItem("Ip_config");
     ip_port=sessionStorage.getItem("Ip_port");
     if(ip_config===null || ip_port===null)
-      myApp.loginScreen();    
+      myApp.loginScreen(); 
+      myApp.alert("verifConfig");
 };  
-
+/*
 function verifDeviceConfig()
 {
     manageDB();
     getWsConfiguration();
 };
+*/
 var leftView=myApp.addView('.view-left',{
     domCache: true,dynamicNavbar:true
    });
 myApp.onPageInit('home', function (page) { 
      HomeBackButton=document.getElementById("homeBackButton");
      myApp.params.swipePanel=false;
-   // verifConfig();
-    verifDeviceConfig();    
+    verifConfig();
+   // verifDeviceConfig();   
     
 }).trigger();                       
 myApp.onPageInit('WSConfigurationScreen', function (page) {
@@ -142,8 +150,7 @@ myApp.onPageInit('WSConfigurationScreen', function (page) {
    loadJSFile("js/WSConfigurationScreen.js");
 });   
 myApp.onPageInit('homePage', function (page) {   
-    
-    loadJSFile("js/homePage.js");      
+    //loadJSFile("js/homePage.js");      
      myApp.params.swipePanel=false;    
     setTemplate_HeaderData('homePage');
    setTimeout(function() {loadTaskList(); }, 1000) ;
@@ -201,6 +208,21 @@ myApp.onPageInit('searchResultScreen', function (page) {
     console.log("URL",url);
    setTimeout(function() {lunchSearchResult(url); }, 1000) ;
 });  
+
+myApp.onPageInit('executeTaskScreen', function (page) {
+    HomeBackButton.style.visibility="visible";
+    createLanguagesList('executeTaskScreen'); 
+    createLogoutPopover('executeTaskScreen');  
+    myApp.params.swipePanel=false;
+    pageTitleElement=document.getElementById("title_executeTaskScreen");
+    pageTitleElement.textContent=pageTitleContent;
+    setTemplate_HeaderData('executeTaskScreen'); 
+     myApp.showPreloader();
+      var url='http://'+ sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetExecuteTaskScreen';
+    console.log("URL",url);
+    setTimeout(function() {GetExecuteTaskScreen(url); }, 1000) ;
+});  
+
 function setTemplate_HeaderData(pScreen){
     document.getElementById("userName_label"+"_"+pScreen).textContent=sessionStorage.getItem('userName');
      document.getElementById("lng_label"+"_"+pScreen).textContent=sessionStorage.getItem('language');
@@ -316,7 +338,6 @@ function setUser_ShortName(userShortName){
     
 };  
 function GetHomePage(url) {
-   
    var  ProfilesList=GenerateResponseArray(sessionStorage.getItem("ProfilesList")); 
    var  AccessRightUserList=GenerateResponseArray(sessionStorage.getItem("AccessRightUserList")); 
    var  InternalEntitiesShortName=GenerateResponseArray(sessionStorage.getItem("InternalEntitiesShortname"));    
@@ -347,16 +368,22 @@ function GetHomePage(url) {
         data: data,    
         success: function(data) {
              document.getElementById("tasks").innerHTML=data.TasksContent;
-             document.getElementById("westMenu").innerHTML=data.WestMenuContent;
+            // document.getElementById("westMenu").innerHTML=data.WestMenuContent;
+            // leftView.innerHTML=data.WestMenuContent;
+            $.getScript("js/Macp.js");
+            $('.view-left').html(data.WestMenuContent);
+            $("script[src='js/Macp.js']").remove();
             sessionStorage.setItem("Languages",data.Languages);
              var languages=sessionStorage.getItem('Languages');
              languagesList = JSON.parse(languages); 
              createLanguagesList('homePage');
              createLogoutPopover('homePage'); 
-            $.getScript("js/Macp.js");
              myApp.hidePreloader();
+               
+               
+           
         },
-        error: function(e) {
+        error: function(e) {  
              myApp.hideIndicator();     
               myApp.alert("error occured in the system");
         }
@@ -420,7 +447,7 @@ function lunchSearchResult(url){
     console.log("SearchParams",data);          
     $.ajax({             
         type: 'POST',           
-        url: url,                  
+        url: url,                      
         contentType: "text/plain",                          
         dataType: "json",                            
         data: data,         
@@ -436,7 +463,7 @@ function lunchSearchResult(url){
             loadJSFile("js/SearchResultScreen.js");
             myApp.hidePreloader();
             
-        },
+        },  
         error: function(e) { 
             console.log(e.message);  
             verifconnexion = false;  
@@ -471,11 +498,13 @@ function HomeBack(){
     mainView.router.back({force:true,pageName:"homePage"});
     
 };
+/*
 function manageDB(){
      db.transaction(function(tx) {
                   tx.executeSql('Create Table  IF NOT EXISTS WSConfiguration (id REAL UNIQUE,ip, port)');
               });
-};   
+}; 
+
 function getWsConfiguration(){
            db.transaction(function (t) {
        t.executeSql('SELECT * FROM WSConfiguration', [], function (t, r)
@@ -495,9 +524,11 @@ function getWsConfiguration(){
     }, null)
   });
 };
+*/
 function onError(tx, error) {
    myApp.alert(error.message);
  };
+/*
 function saveWsConfiguration(ip,port){    
        db.transaction(function (t) {
        t.executeSql('INSERT INTO WSConfiguration (id,ip,port) VALUES (1,"'+ip+'","'+port+'")');
@@ -507,6 +538,7 @@ function saveWsConfiguration(ip,port){
     sessionStorage.setItem('Ip_config', ip);
     sessionStorage.setItem('Ip_port', port);
 };
+
 function updateWsConfiguration(ip,port){
            db.transaction(function (t) {
        t.executeSql('Update WSConfiguration SET ip="'+ip+'" , port="'+port+'" where id=1');
@@ -514,3 +546,60 @@ function updateWsConfiguration(ip,port){
        sessionStorage.setItem('Ip_config', ip);
     sessionStorage.setItem('Ip_port', port);   
 };
+*/
+
+function ExecuteTask(taskId,workflowName){
+    TaskId=taskId;
+    ExecutedWorkflowName=workflowName;
+    mainView.router.load({url: "executeTaskScreen.html",reload:true});
+}
+
+function GetExecuteTaskScreen(url){
+  var  ProfilesList=GenerateResponseArray(sessionStorage.getItem("ProfilesList"));   
+   var  GroupsList=GenerateResponseArray(sessionStorage.getItem("GroupsList"));     
+   var  InternalEntities=GenerateResponseArray(sessionStorage.getItem("InternalEntities"));
+     ProfilesList=JSON.stringify(ProfilesList); 
+   GroupsList =JSON.stringify(GroupsList); 
+   InternalEntities=JSON.stringify(InternalEntities);    
+    var data="{"+  
+        "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +
+        "\"taskId\":\""+TaskId+"\"," +
+        "\"userShortName\":\""+setUser_ShortName(sessionStorage.getItem("userShortName"))+"\"," +
+        "\"interalEntites\":"+InternalEntities+","+
+        "\"profilesList\":"+ProfilesList+","+      
+        "\"groupsList\":"+GroupsList+","+          
+        "\"screenWidth\":\""+window.innerWidth+"\","+
+        "\"screenHeight\":\""+(window.innerHeight-90)+"\"}";
+  $.ajax({             
+        type: 'POST',           
+        url: url,                  
+        contentType: "text/plain",                           
+        dataType: "json",                            
+        data: data,             
+        success: function(data) {       
+            if(data.status==="ok")
+                {
+                    document.getElementById("executeTaskContent").innerHTML=data.content;
+                    itemId=data.itemId;
+                    stopWFMessage=data.stopWFMessage;
+                     pageTitleElement=document.getElementById("title_executeTaskScreen");
+                     pageTitleElement.textContent=data.itemShortName;
+                     $('#executeTask-toolbarContent').append(data.endTaskButton);
+                        $('#executeTask-toolbarContent').append(data.stopWorkflowButton);
+                        loadJSFile("js/EditScreen.js");
+                        loadJSFile("js/ExecuteTaskScreen.js");
+                    myApp.hidePreloader();                    
+                }
+            else                     
+                { 
+                    myApp.hidePreloader();
+                }
+        },
+        error: function(e) {         
+             
+            console.log(e.message);  
+            verifconnexion = false;        
+            myApp.hidePreloader();                  
+        }                             
+    });     
+}
