@@ -1,6 +1,7 @@
 var loading = false;
 var selectedItem; 
 var SearchResultScreen_JSFlag;
+
 var itemId,itemRef;
  
 
