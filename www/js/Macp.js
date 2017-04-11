@@ -9,15 +9,15 @@ var pageTitleElement;
 var currentItem;
 var searchParams;
 var HomeBackButton;
-var myApp=new Framework7({ swipeBackPage : false,statusbarOverlay:true}) ;
+var x= false;
+var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left' }) ;
 var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
      domCache: true
 });
 
-function isScreenInCache(screenName)
-{
+function isScreenInCache(screenName){
     var history=mainView.history;
     console.log(screenName);
     for(var i=0 ; i<history.length ; i++)
@@ -45,8 +45,10 @@ function westMenuItem(item,title,screenName){
       mainView.router.load({url: screenName,reload:true});   
     mainView.hideToolbar();
 };  
+
 myApp.onPageReinit('homePage', function (page) {
-      document.getElementById("tasks").innerHTML=null;
+     document.getElementById("tasks").innerHTML=null;
+     document.getElementById("toolbar").innerHTML=null;
      setTimeout(function() {reInitHomePage(); }, 100) ;
      console.log(mainView.history);
 });  
@@ -82,9 +84,12 @@ function reInitHomePage(){
         dataType: "json",                               
         data: data,      
         success: function(data) {
-             document.getElementById("tasks").innerHTML=data.TasksContent;
+            document.getElementById("tasks").innerHTML=data.TasksContent;
+            document.getElementById("toolbar").innerHTML=data.toolbar;
+
             console.log("success");
              myApp.hidePreloader();
+GetHomePageScripts(); 
         },
         error: function(e) {
              myApp.hideIndicator();     
@@ -103,10 +108,24 @@ function saveFirstConfig(){
     myApp.closeModal();
 };       
 function loadJSFile(screenName){
-    var js = document.createElement("script");
-    js.type = "text/javascript";    
-    js.src = screenName;
-    document.body.appendChild(js);
+ /*   var isJsloaded = false;
+     var scripts = document.getElementsByTagName("script");
+    for(var i = 0; i < scripts.length; i++)        
+        if((scripts[i].getAttribute('src') === screenName))        
+        {    
+          
+            myApp.alert("is loaded "+scripts[i].getAttribute('src'));            
+            isJsloaded=true;
+        }    
+    if(!isJsloaded)
+        {   */            
+            var js = document.createElement("script");
+            js.type = "text/javascript";                
+            js.src = screenName;                        
+        //    myApp.alert("is not loaded "+screenName);             
+            document.body.appendChild(js);
+     //  }
+
 };
 
 function isScriptAlreadyIncluded(src){
@@ -121,29 +140,37 @@ function verifConfig(){
     if(ip_config===null || ip_port===null)
       myApp.loginScreen();    
 };  
-
-function verifDeviceConfig()
-{
+function verifDeviceConfig(){
     manageDB();
     getWsConfiguration();
 };
 var leftView=myApp.addView('.view-left',{
     domCache: true,dynamicNavbar:true
    });
-myApp.onPageInit('home', function (page) { 
-     HomeBackButton=document.getElementById("homeBackButton");
+
+document.addEventListener("deviceready", onDeviceReady, true);
+
+function onDeviceReady() {
+    if(!x){
+    // Now safe to use device APIs
+         HomeBackButton=document.getElementById("homeBackButton");
      myApp.params.swipePanel=false;
-   // verifConfig();
-    verifDeviceConfig();    
+    verifConfig();
+    }
+} 
+//myApp.onPageInit('home', function (page) { 
+   //  HomeBackButton=document.getElementById("homeBackButton");
+  //   myApp.params.swipePanel=false;
+ //   verifConfig();
+  //  verifDeviceConfig();    
     
-}).trigger();                       
+//}).trigger();                       
 myApp.onPageInit('WSConfigurationScreen', function (page) {
+    
     myApp.params.swipePanel=false;    
    loadJSFile("js/WSConfigurationScreen.js");
 });   
 myApp.onPageInit('homePage', function (page) {   
-    
-    loadJSFile("js/homePage.js");      
      myApp.params.swipePanel=false;    
     setTemplate_HeaderData('homePage');
    setTimeout(function() {loadTaskList(); }, 1000) ;
@@ -175,7 +202,6 @@ myApp.onPageInit('editScreen', function (page) {
     setTimeout(function() {loadEditScreen(itemId); }, 1000) ;
     
 }); 
-
 myApp.onPageInit('newInputScreen', function (page) {
     HomeBackButton.style.visibility="visible"; 
     createLanguagesList('newInputScreen');
@@ -212,6 +238,7 @@ function loadsearchScreen(){
    
 };       
 function loadTaskList() {
+
      tasks=document.getElementById('tasks');
      var deviceWidth = window.innerWidth - 50;
       GetHomePage('http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/getHomePage');  
@@ -221,14 +248,10 @@ function loadNewInputPage(){
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetNewInputScreen/'+currentItem;
     GetNewInputScreen(url);
 };  
-
-
-function loadEditScreen(itemId)
-{
+function loadEditScreen(itemId){
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetEditScreen';
     GetEditScreen(url,itemId);
 }; 
-
 function GetEditScreen(url,itemId){ 
      var data="{"+            
         "\"screenName\":\""+currentItem+"\","+
@@ -299,6 +322,16 @@ function GetSearchPage(url){
                  
             });    
 };  
+function GetHomePageScripts(){
+                 $.getScript("js/Macp.js");
+             $("script[src='js/Macp.js']").remove();
+
+             $.getScript("js/Macp.js");
+            $("script[src='js/Macp.js']").remove();
+            $("script[src='js/Macp.js']").remove();
+             $("script[src='js/homePage.js']").remove();
+             loadJSFile("js/homePage.js"); 
+}
 function GenerateResponseArray(element){ 
    var res = element.split(",");
    var result = [];//Array
@@ -314,11 +347,11 @@ function GenerateResponseArray(element){
 }; 
 function setUser_ShortName(userShortName){
     var res = userShortName.split('\\');
-    return res[0]+'\\\\'+res[1];
+    return res[0]+'\\\\'+res[1]; 
     
-};  
+}; 
+
 function GetHomePage(url) {
-   
    var  ProfilesList=GenerateResponseArray(sessionStorage.getItem("ProfilesList")); 
    var  AccessRightUserList=GenerateResponseArray(sessionStorage.getItem("AccessRightUserList")); 
    var  InternalEntitiesShortName=GenerateResponseArray(sessionStorage.getItem("InternalEntitiesShortname"));    
@@ -348,14 +381,29 @@ function GetHomePage(url) {
         dataType: "json",                               
         data: data,    
         success: function(data) {
+
              document.getElementById("tasks").innerHTML=data.TasksContent;
              document.getElementById("westMenu").innerHTML=data.WestMenuContent;
-            sessionStorage.setItem("Languages",data.Languages);
+             document.getElementById("toolbar").innerHTML=data.toolbar;
+             
+             sessionStorage.setItem("Languages",data.Languages);
              var languages=sessionStorage.getItem('Languages');
              languagesList = JSON.parse(languages); 
              createLanguagesList('homePage');
              createLogoutPopover('homePage'); 
+           //  loadJSFile("js/Macp.js");
+         /*    $("script[src='js/Macp.js']").remove();
             $.getScript("js/Macp.js");
+             $("script[src='js/Macp.js']").remove();
+            //$("script[src='js/Macp.js']").remove();
+
+             loadJSFile("js/homePage.js"); 
+              $.getScript("js/Macp.js");
+             $("script[src='js/Macp.js']").remove();*/
+
+          //  $("script[src='js/homePage.js']").remove();
+            
+GetHomePageScripts();
              myApp.hidePreloader();
         },
         error: function(e) {
@@ -365,6 +413,8 @@ function GetHomePage(url) {
     });          
              
 };  
+
+
 function createLanguagesList(screen){
     $$('.create-language-links-'+screen).on('click', function () {
   var clickedLink = this;
@@ -516,3 +566,5 @@ function updateWsConfiguration(ip,port){
        sessionStorage.setItem('Ip_config', ip);
     sessionStorage.setItem('Ip_port', port);   
 };
+
+

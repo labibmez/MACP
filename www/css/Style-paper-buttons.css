@@ -289,3 +289,22 @@
         .paper-button.colored.raised-button .custom-ripple {
             background-color: yellow;
         }
+
+
+.selectedRow{
+    background: #cccccc;
+}
+.gridRow{    
+-moz-user-select: none;        
+-webkit-user-select: none;        
+user-select: none;
+}
+.disabledButton{
+    border-color: #c5c5c5 !important;
+    background: #c5c5c5 !important;
+    color : #fff !important;
+}
+
+.displayNone{
+    display: none !important;
+}

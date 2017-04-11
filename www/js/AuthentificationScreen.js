@@ -1,5 +1,4 @@
-var myApp = new Framework7();
-var $$ = Dom7;
+
 function onClickLoginButton(){
       try {
           var login = document.getElementById('userName').value;
