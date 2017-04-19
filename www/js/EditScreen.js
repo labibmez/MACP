@@ -1,6 +1,6 @@
 var divId;
 var EditScreen_JSFlag;
-var engine="classicms";
+var engine;
 var relatedItemId;
 var fileUploadedName;
 var fileData;
@@ -18,7 +18,7 @@ function loadRelatedItemPopup(id,isDuplicateAction)
                     url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
                     success: function(data) { 
                         myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
-                        loadJSFile("js/EditScreen.js"); 
+                     //   loadJSFile("js/EditScreen.js"); 
                         myApp.hidePreloader();
                     }, 
                     error: function(e) {
@@ -54,7 +54,7 @@ function loadScreen(divID,screenEngine)     {
         "\"screenEngine\":\""+screenEngine+"\","+
         "\"screenWidth\":\""+window.innerWidth+"\"," +
         "\"screenHeight\":\""+window.innerHeight+"\"}"; 
-       myApp.showPreloader();
+       myApp.showPreloader(); 
             $.ajax({    
                     type: "POST", 
                     url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetLoadEditTabFrame",
@@ -130,11 +130,20 @@ function menuTabClick(divID,butDiv,screenEngine)
     if(!($('#'+butDiv).hasClass('loaded')))  
     {
         $('#'+butDiv).addClass('loaded');             
-        loadScreen(divID,screenEngine);
-        
+        loadScreen(divID,screenEngine);        
     }
     $("div").siblings(".Active").removeClass('Active');
-    $('#'+divID).addClass('Active');    
+    $('#'+divID).addClass('Active'); 
+    switch(screenEngine){
+        case "classicre" : 
+            document.getElementById("saveBlock").classList.add("displayNone");
+            document.getElementById("editBlock").classList.remove("displayNone");
+            break;
+        case "classicms":
+            document.getElementById("editBlock").classList.add("displayNone");
+            document.getElementById("saveBlock").classList.remove("displayNone");
+            break;
+    }
      
 }
   

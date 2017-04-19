@@ -302,9 +302,10 @@ function GetEditScreen(url,itemId){
                     success: function(data) { 
                         console.log(data);
                         document.getElementById("editScreenForm").innerHTML=data.content;
-                         $('#edit-toolbarContent').append(data.StarWFButton);
-                        $('#edit-toolbarContent').append(data.Savebutton);
+                        $('#edit-toolbarContent').append(data.StarWFButton);
                         $('#edit-toolbarContent').append(data.DocumentGeneration);
+                        $('#edit-toolbarContent').append(data.Savebutton);
+                        $('#edit-toolbarContent').append(data.AddButton);
                         docMenu=(data.DocumentMenu);
                         loadJSFile("js/EditScreen.js");
                         loadJSFile("js/WorkflowManager");
@@ -314,7 +315,7 @@ function GetEditScreen(url,itemId){
                        myApp.alert("error occured");      
                     }   
             });         
-};                
+};                 
 function GetNewInputScreen(url){
     $.ajax({ 
                     type: "GET", 
