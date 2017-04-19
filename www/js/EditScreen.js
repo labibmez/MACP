@@ -144,7 +144,44 @@ $$('.startWF-From-Edit-Screen-form-to-data').on('click', function(){
     startWorkflow_ButtonAction(itemId);
 });
 
+function generateDocumentMenu(){
+   
+myApp.popup('<div id="documentMenuPopup" class="popup" style="width: 60% !important; top: 10% !important;left: 20% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+docMenu+'</div>', true);
+}
 
+function generateDocument(documentName,item){
+     var url="http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/ExportReport";
+    
+          var data="{"+  
+        "\"entityType\":\""+item+"\"," +
+        "\"fileName\":\""+documentName+"\"," +
+        "\"format\":\"pdf\","+
+        "\"itemID\":\""+itemId+"\","+
+        "\"userId\":\""+sessionStorage.getItem("userId")+"\"}";
+$.ajax({             
+        type: 'POST',           
+        url: url,                  
+        contentType: "text/plain",                          
+        dataType: "json",   
+        data : data, 
+        success: function(data) {     
+    if(device.manufacturer.toLowerCase()==="apple")
+        {        
+        var ref = cordova.InAppBrowser.open("data:application/pdf;base64,"+data.content,'_blank', 'location=no,closebuttoncaption=X,toolbarposition=top');
+        }
+    else
+        myApp.alert("android still to check with daly");
+//        document.getElementById("device").innerHTML="<a href=' window.open(decodeURIComponent(window.atob("+streamPDF+")), '_system', 'toolbar=yes,scrollbars=yes,resizable=yes,left=500,width=400,height=400')'>azerty</a>">;
+   //  window.open('http://192.168.1.47:92/ergon.pdf', '_system', 'toolbar=yes,scrollbars=yes,resizable=yes,left=500,width=400,height=400');
+
+        },
+        error: function(e) {
+                myApp.alert("error "+e.message);
+
+        }                
+    }); 
+    //myApp.alert(item+"labib "+documentName);
+}
 $$('.edit-mainData-form-to-data').on('click', function(){
     var i;
     var indexToSelect=1;

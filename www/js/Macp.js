@@ -10,6 +10,7 @@ var pageTitleElement;
 var currentItem;
 var searchParams;
 var HomeBackButton;
+var docMenu;
 var eligibility;
 var stopWFMessage;
 var TaskId;
@@ -20,7 +21,7 @@ var ExecutedWorkflowName;
 
 
 var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left' }) ;
-var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
+//var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
 
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
@@ -297,12 +298,14 @@ function GetEditScreen(url,itemId){
                     url: url,
                     contentType: "text/plain",                          
                     dataType: "json",                      
-                    data: data, 
+                    data: data,        
                     success: function(data) { 
                         console.log(data);
                         document.getElementById("editScreenForm").innerHTML=data.content;
                          $('#edit-toolbarContent').append(data.StarWFButton);
                         $('#edit-toolbarContent').append(data.Savebutton);
+                        $('#edit-toolbarContent').append(data.DocumentGeneration);
+                        docMenu=(data.DocumentMenu);
                         loadJSFile("js/EditScreen.js");
                         loadJSFile("js/WorkflowManager");
                          myApp.hidePreloader();
