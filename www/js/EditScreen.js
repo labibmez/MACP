@@ -43,7 +43,7 @@ function manageAttechementElement()
     reader.readAsDataURL(file);
 } 
             
-}   
+}        
     
 
 
@@ -517,9 +517,9 @@ function downloadAsset(fileName) {
        
      function fail(evt) {  
        console.log(evt.target.error.code);  
-     }  
+     }    
 */
-
+  
 
 
 
