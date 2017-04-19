@@ -10,7 +10,7 @@ var pageTitleElement;
 var currentItem;
 var searchParams;
 var HomeBackButton;
-
+var eligibility;
 var stopWFMessage;
 var TaskId;
 var ExecutedWorkflowName;
@@ -92,7 +92,7 @@ function reInitHomePage(){
         "\"windowWidth\":\""+window.innerWidth+"\","+
         "\"windowHeight\":\""+(window.innerHeight-90)+"\"}";
      $.ajax({             
-        type: 'POST',                             
+        type: 'POST',                               
         url: url,                                  
         contentType: "text/plain",                                      
         dataType: "json",                               
@@ -140,7 +140,7 @@ function loadJSFile(screenName){
             document.body.appendChild(js);
      //  }
 
-};
+};  
 
 function isScriptAlreadyIncluded(src){
     var scripts = document.getElementsByTagName("script");
@@ -153,7 +153,6 @@ function verifConfig(){
     ip_port=sessionStorage.getItem("Ip_port");
     if(ip_config===null || ip_port===null)
       myApp.loginScreen(); 
-      myApp.alert("verifConfig");
 };  
 /*
 function verifDeviceConfig(){
@@ -415,30 +414,23 @@ function GetHomePage(url) {
         success: function(data) {
 
              document.getElementById("tasks").innerHTML=data.TasksContent;
-
              document.getElementById("westMenu").innerHTML=data.WestMenuContent;
-             document.getElementById("toolbar").innerHTML=data.toolbar;
-             
+            document.getElementById("toolbar").innerHTML=data.toolbar;
              sessionStorage.setItem("Languages",data.Languages);
              var languages=sessionStorage.getItem('Languages');
              languagesList = JSON.parse(languages); 
              createLanguagesList('homePage');
              createLogoutPopover('homePage'); 
-
-            
              GetHomePageScripts();
              myApp.hidePreloader();
-               
-               
-           
         },
         error: function(e) {  
              myApp.hideIndicator();     
               myApp.alert("error occured in the system");
         }
     });          
-             
-};  
+               
+};                
 
 
 function createLanguagesList(screen){
@@ -633,13 +625,16 @@ function GetExecuteTaskScreen(url){
                     document.getElementById("executeTaskContent").innerHTML=data.content;
                     itemId=data.itemId;
                     stopWFMessage=data.stopWFMessage;
+                     eligibility=data.eligibility;
+                     currentItem=data.screenName;
                      pageTitleElement=document.getElementById("title_executeTaskScreen");
                      pageTitleElement.textContent=data.itemShortName;
                      $('#executeTask-toolbarContent').append(data.endTaskButton);
-                        $('#executeTask-toolbarContent').append(data.stopWorkflowButton);
+                     $('#executeTask-toolbarContent').append(data.stopWorkflowButton);
+                     $('#executeTask-toolbarContent').append(data.saveButton);
                         loadJSFile("js/EditScreen.js");
                         loadJSFile("js/ExecuteTaskScreen.js");
-                    myApp.hidePreloader();                    
+                    myApp.hidePreloader();      
                 }
             else                     
                 { 

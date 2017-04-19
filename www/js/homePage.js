@@ -20,7 +20,7 @@ $$('.gridRow').on('taphold', function () {
     if($(gridRow[i]).hasClass('selectedRow'))
         {
         isAllChecked=1;
-        }
+        } 
 }  
           if(isAllChecked==0)
               {
@@ -29,7 +29,7 @@ $$('.gridRow').on('taphold', function () {
                     $('.reassignTo').addClass('disabledButton');
                     $('.checkNavP').addClass('displayNone');
               }
-    else
+    else    
         {
             selected = true;
             $('.reassignTo').removeAttr('disabled')      
