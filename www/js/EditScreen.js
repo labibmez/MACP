@@ -360,7 +360,7 @@ function testclick(msg){
             $(checkBox[i]).removeClass("requiredIcon");
         }
     }
-    if(!isValid)
+    if(!isValid)     
     {
        $(x[indexToSelect]).next().children().first().focus();
     }else
