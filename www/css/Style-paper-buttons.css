@@ -132,9 +132,22 @@
     font-family: FontAwesome !important;
     color: #fff !important;
     content : "\f0c5";
-    font-size:25px;
+    font-size:20px;
+}
+ 
 
-
+.editButton:before{
+    font-family: FontAwesome !important;
+    color: #fff !important;
+    content : "\f044";
+    font-size:20px;
+}
+ 
+.deleteButton:before{
+    font-family: FontAwesome !important;
+    color: #fff !important;
+    content : "\f014";
+    font-size:20px;
 }
  
 
