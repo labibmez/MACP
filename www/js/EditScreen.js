@@ -141,7 +141,7 @@ function menuTabClick(divID,butDiv,screenEngine)
     }
     $("div").siblings(".Active").removeClass('Active');
     $('#'+divID).addClass('Active'); 
-    switch(screenEngine){
+    switch(screenEngine){ 
         case "classicre" : 
             document.getElementById("saveBlock").classList.add("displayNone");
             document.getElementById("editBlock").classList.remove("displayNone");
