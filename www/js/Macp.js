@@ -20,7 +20,7 @@ var ExecutedWorkflowName;
 //var x= false;
 
 
-var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left' }) ;
+var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left',fastClicksDelayBetweenClicks:10 }) ;
 //var db = openDatabase('MACPDB', '1.0', 'MACP DB', 50 * 1024 * 1024); 
 
 var mainView = myApp.addView('.view-main', {
