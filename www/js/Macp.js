@@ -20,6 +20,8 @@ var itemRef;
 var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left',fastClicksDelayBetweenClicks : 10 }) ;
 var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
 
+//var x= false;
+
 
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
