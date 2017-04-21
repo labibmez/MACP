@@ -118,25 +118,23 @@ for (i = 0; i < gridRow.length; i++)
 });
 function loadGroupMembersPopup()
 { 
-
-   
+ var popupWidth=window.innerWidth*0.80;
+     var popunHeight=95;
+    popupWidth=Math.floor(popupWidth); 
        var selectedRow=$("ul li div div.selectedRow");
 for (i = 0; i < selectedRow.length; i++) 
 {
     selectedTaskId[i]=($(selectedRow[i]).find('#ID').html());
         selectedItemId[i]=($(selectedRow[i]).find('#ItemId').html());
+}
 
-    }
- 
-  
-     
     var data="{"+  
         "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +    
         "\"HomePageConfig\":\""+sessionStorage.getItem("HomePageConfig")+"\","+      
         "\"selectedTaskId\":\""+selectedTaskId+"\","+
-        "\"windowWidth\":\""+window.innerWidth+"\","+
-        "\"windowHeight\":\""+470+"\"}";
-       myApp.showPreloader();
+        "\"windowWidth\":\""+popupWidth+"\","+
+        "\"windowHeight\":\""+popunHeight+"\"}";
+       myApp.showPreloader();  
             $.ajax({ 
                     type: "POST", 
                     url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetGroupMembersPopup",
@@ -144,7 +142,7 @@ for (i = 0; i < selectedRow.length; i++)
                     dataType: "json",                      
                     data: data, 
                     success: function(data) { 
-                        myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
+                        myApp.popup('<div class="popup" style="overflow:hidden !important; width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important; padding-left:5px !important; padding-right:5px !important ;padding-top:7px !important; padding-bottom:7px !important" >'+data.content+'</div>', true);
                         myApp.hidePreloader();
                     }, 
                     error: function(e) {

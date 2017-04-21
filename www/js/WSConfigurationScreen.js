@@ -3,7 +3,7 @@
 function saveConfiguration() {
     ip = document.getElementById('ip').value,
     port = document.getElementById('port').value;
-    updateFromDevice(ip,port);
+   updateFromEmulator(ip,port);
     mainView.router.back();                            
  }  
 
@@ -30,4 +30,4 @@ $$('.WS-confirm-ok-cancel').on('click', function () {
       function () {
       }
     );
-});
+});          
