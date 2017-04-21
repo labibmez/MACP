@@ -614,6 +614,8 @@ function GetExecuteTaskScreen(url){
                      $('#executeTask-toolbarContent').append(data.endTaskButton);
                      $('#executeTask-toolbarContent').append(data.stopWorkflowButton);
                      $('#executeTask-toolbarContent').append(data.saveButton);
+                     $('#executeTask-toolbarContent').append(data.DocumentGeneration);
+                    docMenu=(data.DocumentMenu);
                         loadJSFile("js/EditScreen.js");
                         loadJSFile("js/ExecuteTaskScreen.js");
                     myApp.hidePreloader();      
