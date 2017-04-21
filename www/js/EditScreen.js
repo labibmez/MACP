@@ -18,7 +18,6 @@ function loadRelatedItemPopup(id,isDuplicateAction)
                     url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
                     success: function(data) { 
                         myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
-                     //   loadJSFile("js/EditScreen.js"); 
                         myApp.hidePreloader();
                     }, 
                     error: function(e) {
@@ -47,11 +46,11 @@ function manageAttechementElement()
     
 
 
-function loadScreen(divID,screenEngine)     {
+function loadScreen(divID)     {
      var data="{"+             
         "\"screenName\":\""+divId+"\","+ 
         "\"mainItemId\":\""+itemId+"\"," +
-        "\"screenEngine\":\""+screenEngine+"\","+
+        "\"screenEngine\":\""+engine+"\","+
         "\"screenWidth\":\""+window.innerWidth+"\"," +
         "\"screenHeight\":\""+window.innerHeight+"\"}"; 
        myApp.showPreloader(); 
@@ -62,16 +61,24 @@ function loadScreen(divID,screenEngine)     {
                     dataType: "json",                      
                     data: data, 
                     success: function(data) { 
-                        document.getElementById(divID).innerHTML=data.content;                     
-                        //loadJSFile("js/EditScreen.js");   
+                        document.getElementById(divID).innerHTML=data.content; 
                         myApp.hidePreloader();
-                        console.log(screenEngine);
-                        if(screenEngine==="attachement")
+                        switch(engine)
                             {
-                               
-                                myApp.accordionOpen(".accordion-item");
-                                manageAttechementElement();
+                                case ("attachment") :
+                                    {
+                                     myApp.accordionOpen(".accordion-item");
+                                     manageAttechementElement();
+                                     break;
+                                    }
+                                case ("classicre") :
+                                    {
+                                    document.getElementById(divID).innerHTML=data.content;       
+                                    myApp.hidePreloader();
+                                    break;
+                                     }
                             }
+                        
 
                     },   
                     error: function(e) {
@@ -110,7 +117,7 @@ function deleteItem(id,culture){
                     success: function(data) {                            
                         myApp.hidePreloader();
                         myApp.alert(data.status, function () {                        
-                            loadScreen(divId,engine);      
+                            loadScreen(divId);      
                         });
                     },    
                     error: function(e) {
@@ -130,7 +137,7 @@ function menuTabClick(divID,butDiv,screenEngine)
     if(!($('#'+butDiv).hasClass('loaded')))  
     {
         $('#'+butDiv).addClass('loaded');             
-        loadScreen(divID,screenEngine);        
+        loadScreen(divID);
     }
     $("div").siblings(".Active").removeClass('Active');
     $('#'+divID).addClass('Active'); 
@@ -152,6 +159,7 @@ $$('.startWF-From-Edit-Screen-form-to-data').on('click', function(){
     
     startWorkflow_ButtonAction(itemId);
 });
+
 
 function generateDocumentMenu(){
    
@@ -189,13 +197,30 @@ $.ajax({
 
         }                
     }); 
-    //myApp.alert(item+"labib "+documentName);
 }
+
 $$('.edit-mainData-form-to-data').on('click', function(){
     var i;
     var indexToSelect=1;
     var isValid = true;
-    var textBox=$("form div.requiredItem.textbox input" )
+    var textBox;
+    var dateOnly;
+    var checkBox;
+    var comboBox;
+    if(engine==="classicms")
+        {
+     textBox=$("#my-mainData-form div.requiredItem.textbox input" );
+     dateOnly=$("#my-mainData-form div.requiredItem.dateonly input" );
+     comboBox=$("#my-mainData-form div.requiredItem.combobox div.item-after" );
+     checkBox=$("#my-mainData-form div.requiredItem.checkbox label.label-checkbox");
+        }
+    else if(engine==="attachment")
+        {
+     textBox=$("#my-attachment-form div.requiredItem.textbox input" );
+     dateOnly=$("#my-attachment-form div.requiredItem.dateonly input" );
+     comboBox=$("#my-attachment-form div.requiredItem.combobox div.item-after" );
+     checkBox=$("#my-attachment-form div.requiredItem.checkbox label.label-checkbox");
+        }
     for (i = 0; i < textBox.length; i++) 
     {
 
@@ -209,7 +234,7 @@ $$('.edit-mainData-form-to-data').on('click', function(){
             $(textBox[i]).closest("div.item-inner").removeClass("requiredIcon");
         }
     }
-    var dateOnly=$("form div.requiredItem.dateonly input" )
+    
     for (i = 0; i < dateOnly.length; i++) 
     {
         if($(dateOnly[i]).val().replace(/\s/g, '')==="")
@@ -222,7 +247,7 @@ $$('.edit-mainData-form-to-data').on('click', function(){
             $(dateOnly[i]).closest("div.item-inner").removeClass("requiredIcon");
         }
     }
-    var comboBox=$("form div.requiredItem.combobox div.item-after" )
+   
     for (i = 0; i < comboBox.length; i++)
     {
         if($(comboBox[i]).html().replace(/\s/g, '')==="")
@@ -235,7 +260,7 @@ $$('.edit-mainData-form-to-data').on('click', function(){
             $(comboBox[i]).closest("div.item-inner").removeClass("requiredIcon");
         }            
     }  
-    var checkBox=$("form div.requiredItem.checkbox label.label-checkbox")
+    
     for (i = 0; i < checkBox.length; i++)
     {
         if($(checkBox[i]).find("input").is(":checked")==false)
@@ -258,12 +283,13 @@ $$('.edit-mainData-form-to-data').on('click', function(){
             {
             mainData_SaveEvent();
             }
-        else if(engine==="attachement")
+        else if(engine==="attachment")
             {
             attachement_SaveEvent();
             }
     }
 });
+
 
 function mainData_SaveEvent()
 {
@@ -372,7 +398,7 @@ function UpdateRelatedItem(parameters,msg){
                 {
                     myApp.hidePreloader();
                         myApp.alert(msg, function () {
-                        loadScreen(divId,engine);
+                        loadScreen(divId);
 
                         });
  myApp.closeModal(".popup",true);
@@ -395,8 +421,7 @@ function UpdateRelatedItem(parameters,msg){
     }); 
 }
 
-function uploadAttachementFile()
-{
+function uploadAttachementFile(){
   var formData = myApp.formToData('#my-attachment-form');
         parameters=JSON.stringify(formData);
         myApp.showPreloader();
@@ -419,7 +444,7 @@ function uploadAttachementFile()
             if(data.status==="ok")
                 {
                     myApp.hidePreloader();
-                    loadScreen(divId,engine);                      
+                    loadScreen(divId);                      
                 }
             else 
                 { 
@@ -436,8 +461,7 @@ function uploadAttachementFile()
     });   
      
 }
-function fileDetail()
-{
+function fileDetail(){
     myApp.alert("clic");
 }
 function UpdateItem(parameters){
@@ -477,11 +501,6 @@ function UpdateItem(parameters){
         }                           
     });    
 } 
-
-
-
-
-
 function downloadAsset(fileName) {
   var assetURL = "https://raw.githubusercontent.com/cfjedimaster/Cordova-Examples/master/readme.md";  
   var  store = cordova.file.dataDirectory;
@@ -495,39 +514,7 @@ function downloadAsset(fileName) {
         });
 }  
 
-    /*
-       window.requestFileSystem(  
-                    LocalFileSystem.PERSISTENT, 0,  
-                    function onFileSystemSuccess(fileSystem) {  
-                    fileSystem.root.getFile(  
-                                fileName, {create: true, exclusive: false},  
-                                function gotFileEntry(fileEntry){  
-                                var sPath = fileEntry.fullPath.replace(fileName,"");  
-                                var fileTransfer = new FileTransfer();  
-                                fileEntry.remove();  
-                                fileTransfer.download(  
-                                           "http://www.w3.org/2011/web-apps-ws/papers/Nitobi.pdf",  
-                                           sPath + "theFile.pdf",  
-                                           function(theFile) {  
-                                           console.log("download complete: " + theFile.toURI());  
-                                           showLink(theFile.toURI());  
-                                           },  
-                                           function(error) {  
-                                           console.log("download error source " + error.source);  
-                                           console.log("download error target " + error.target);  
-                                           console.log("upload error code: " + error.code);  
-                                           }  
-                                           );  
-                                },  
-                                fail);  
-                    },  
-                    fail);  
-     }  
-       
-     function fail(evt) {  
-       console.log(evt.target.error.code);  
-     }    
-*/
+    
   
 
 

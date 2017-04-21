@@ -303,7 +303,9 @@
             background-color: yellow;
         }
 
-
+.fullHeight{
+    height: 100%;
+}
 .selectedRow{
     background: #cccccc;
 }
