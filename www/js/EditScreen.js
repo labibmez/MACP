@@ -307,7 +307,7 @@ function testclick(msg){
     var i;
     var indexToSelect=1;
     var isValid = true;
-    var textBox=$("form div.requiredItem.textbox input" )
+    var textBox=$("#my-relatedItemPopup-form div.requiredItem.textbox input" )
     
     for (i = 0; i < textBox.length; i++) 
     {
@@ -321,7 +321,7 @@ function testclick(msg){
             $(textBox[i]).closest("div.item-inner").removeClass("requiredIcon");
         }
     }
-    var dateOnly=$("form div.requiredItem.dateonly input" )
+    var dateOnly=$("#my-relatedItemPopup-form div.requiredItem.dateonly input" )
     for (i = 0; i < dateOnly.length; i++) 
     {
         if($(dateOnly[i]).val().replace(/\s/g, '')==="")
@@ -334,7 +334,7 @@ function testclick(msg){
             $(dateOnly[i]).closest("div.item-inner").removeClass("requiredIcon");
         }
     }
-    var comboBox=$("form div.requiredItem.combobox div.item-after" )
+    var comboBox=$("#my-relatedItemPopup-form div.requiredItem.combobox div.item-after" )
     for (i = 0; i < comboBox.length; i++)
     {
         if($(comboBox[i]).html().replace(/\s/g, '')==="")
@@ -347,7 +347,7 @@ function testclick(msg){
             $(comboBox[i]).closest("div.item-inner").removeClass("requiredIcon");
         }            
     }  
-    var checkBox=$("form div.requiredItem.checkbox label.label-checkbox")
+    var checkBox=$("#my-relatedItemPopup-form div.requiredItem.checkbox label.label-checkbox")
     for (i = 0; i < checkBox.length; i++)
     {
         if($(checkBox[i]).find("input").is(":checked")==false)
