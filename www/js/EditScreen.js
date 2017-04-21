@@ -1,6 +1,6 @@
 var divId;
 var EditScreen_JSFlag;
-var engine="classicms";
+var engine;
 var relatedItemId;
 var fileUploadedName;
 var fileData;
@@ -18,7 +18,6 @@ function loadRelatedItemPopup(id,isDuplicateAction)
                     url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetRelatedItemScreen/"+divId+"/"+itemId+"/"+id,
                     success: function(data) { 
                         myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+data.content+'</div>', true);
-                       // loadJSFile("js/EditScreen.js"); 
                         myApp.hidePreloader();
                     }, 
                     error: function(e) {
@@ -54,7 +53,7 @@ function loadScreen(divID)     {
         "\"screenEngine\":\""+engine+"\","+
         "\"screenWidth\":\""+window.innerWidth+"\"," +
         "\"screenHeight\":\""+window.innerHeight+"\"}"; 
-       myApp.showPreloader();
+       myApp.showPreloader(); 
             $.ajax({    
                     type: "POST", 
                     url: "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/GetLoadEditTabFrame",
@@ -139,10 +138,19 @@ function menuTabClick(divID,butDiv,screenEngine)
     {
         $('#'+butDiv).addClass('loaded');             
         loadScreen(divID);
-        
     }
     $("div").siblings(".Active").removeClass('Active');
-    $('#'+divID).addClass('Active');    
+    $('#'+divID).addClass('Active'); 
+    switch(screenEngine){
+        case "classicre" : 
+            document.getElementById("saveBlock").classList.add("displayNone");
+            document.getElementById("editBlock").classList.remove("displayNone");
+            break;
+        case "classicms":
+            document.getElementById("editBlock").classList.add("displayNone");
+            document.getElementById("saveBlock").classList.remove("displayNone");
+            break;
+    }
      
 }
   
@@ -152,81 +160,44 @@ $$('.startWF-From-Edit-Screen-form-to-data').on('click', function(){
     startWorkflow_ButtonAction(itemId);
 });
 
-/*
-$$('.edit-mainData-form-to-data').on('click', function(){
-    var i;
-    var indexToSelect=1;
-    var isValid = true;
-    var textBox=$("form div.requiredItem.textbox input" )
-    for (i = 0; i < textBox.length; i++) 
-    {
 
-        if($(textBox[i]).val().replace(/\s/g, '')==="")
-        {
-            $(textBox[i]).closest("div.item-inner").addClass("requiredIcon");
-            isValid=false;            
+function generateDocumentMenu(){
+   
+myApp.popup('<div id="documentMenuPopup" class="popup" style="width: 60% !important; top: 10% !important;left: 20% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important background : #f1f1f1 !important;" >'+docMenu+'</div>', true);
+}
+
+function generateDocument(documentName,item){
+     var url="http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/ExportReport";
+    
+          var data="{"+  
+        "\"entityType\":\""+item+"\"," +
+        "\"fileName\":\""+documentName+"\"," +
+        "\"format\":\"pdf\","+
+        "\"itemID\":\""+itemId+"\","+
+        "\"userId\":\""+sessionStorage.getItem("userId")+"\"}";
+$.ajax({             
+        type: 'POST',           
+        url: url,                  
+        contentType: "text/plain",                          
+        dataType: "json",   
+        data : data, 
+        success: function(data) {     
+    if(device.manufacturer.toLowerCase()==="apple")
+        {        
+        var ref = cordova.InAppBrowser.open("data:application/pdf;base64,"+data.content,'_blank', 'location=no,closebuttoncaption=X,toolbarposition=top');
         }
-        else
-        {
-            $(textBox[i]).closest("div.item-inner").removeClass("requiredIcon");
-        }
-    }
-    var dateOnly=$("form div.requiredItem.dateonly input" )
-    for (i = 0; i < dateOnly.length; i++) 
-    {
-        if($(dateOnly[i]).val().replace(/\s/g, '')==="")
-        {
-            $(dateOnly[i]).closest("div.item-inner").addClass("requiredIcon");
-            isValid=false;
-        }
-        else
-        {
-            $(dateOnly[i]).closest("div.item-inner").removeClass("requiredIcon");
-        }
-    }
-    var comboBox=$("form div.requiredItem.combobox div.item-after" )
-    for (i = 0; i < comboBox.length; i++)
-    {
-        if($(comboBox[i]).html().replace(/\s/g, '')==="")
-        {
-            $(comboBox[i]).closest("div.item-inner").addClass("requiredIcon");
-            isValid=false;
-        }
-        else
-        {
-            $(comboBox[i]).closest("div.item-inner").removeClass("requiredIcon");
-        }            
-    }  
-    var checkBox=$("form div.requiredItem.checkbox label.label-checkbox")
-    for (i = 0; i < checkBox.length; i++)
-    {
-        if($(checkBox[i]).find("input").is(":checked")==false)
-        {
-            $(checkBox[i]).addClass("requiredIcon");
-            isValid=false;
-        }
-        else
-        {
-            $(checkBox[i]).removeClass("requiredIcon");
-        }
-    }
-    if(!isValid)
-    {
-       $(x[indexToSelect]).next().children().first().focus();
-    }
     else
-    {
-        if(engine==="classicms")
-            {
-            mainData_SaveEvent();
-            }
-        else if(engine==="attachement")
-            {
-            attachement_SaveEvent();
-            }
-    }
-});
-*/
+        myApp.alert("android still to check with daly");
+//        document.getElementById("device").innerHTML="<a href=' window.open(decodeURIComponent(window.atob("+streamPDF+")), '_system', 'toolbar=yes,scrollbars=yes,resizable=yes,left=500,width=400,height=400')'>azerty</a>">;
+   //  window.open('http://192.168.1.47:92/ergon.pdf', '_system', 'toolbar=yes,scrollbars=yes,resizable=yes,left=500,width=400,height=400');
+
+        },
+        error: function(e) {
+                myApp.alert("error "+e.message);
+
+        }                
+    }); 
+}
 
 $$('.edit-mainData-form-to-data').on('click', function(){
     var i;

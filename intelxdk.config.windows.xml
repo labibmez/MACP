@@ -12,6 +12,7 @@
 <intelxdk:plugin intelxdk:name="StatusBar" intelxdk:value="cordova-plugin-statusbar" intelxdk:version="2.0.0" intelxdk:checksum="b92cbbef" intelxdk:type="file"/>
 <intelxdk:plugin intelxdk:name="Device" intelxdk:value="cordova-plugin-device" intelxdk:version="1.1.2" intelxdk:checksum="2373ccea" intelxdk:type="file"/>
 <intelxdk:plugin intelxdk:name="Splashscreen" intelxdk:value="cordova-plugin-splashscreen" intelxdk:version="2.1.0" intelxdk:checksum="a7fdb6d9" intelxdk:type="file"/>
+<intelxdk:plugin intelxdk:name="InAppBrowser" intelxdk:value="cordova-plugin-inappbrowser" intelxdk:version="1.4.0" intelxdk:checksum="f88bc51f" intelxdk:type="file"/>
 <preference name="windows-publisher-display-name"/>
 <preference name="windows-publisher-id"/>
 <preference name="windows-target-version" value="10.0"/>

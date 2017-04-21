@@ -6,7 +6,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "src": "jsapp/template-blank-cordova-ad-project/sample.zip",
       "projectGuid": "197c1c27-5acb-431a-8179-5c479e8a8b62",
-      "lastModifiedDate": 1490782981559,
+      "lastModifiedDate": 1492416319612,
       "creationDate": 1486130602862
     },
     "XDK-app-designer": "true",
@@ -76,7 +76,27 @@
         "gitref": "",
         "name": "Splashscreen",
         "description": "Cordova Splashscreen Plugin",
-        "checksum": "a7fdb6d9"
+        "checksum": "a7fdb6d9",
+        "cordovaVersion": ">=3.1.0"
+      },
+      {
+        "id": "cordova-plugin-inappbrowser",
+        "name": "InAppBrowser",
+        "version": "1.4.0",
+        "originType": "cordova.io",
+        "origin": "cordova-plugin-inappbrowser",
+        "gitref": "",
+        "paramvals": {},
+        "sourceLocation": "plugins/cordova-plugin-inappbrowser",
+        "selectedState": "Included",
+        "checksum": "f88bc51f",
+        "dependsOn": [],
+        "topLevel": true,
+        "cordovaVersion": ">=3.1.0",
+        "permissions": {},
+        "description": "Cordova InAppBrowser Plugin",
+        "data": {},
+        "dependedBy": []
       }
     ],
     "buildConfigurations": {
@@ -93,7 +113,7 @@
           "Orientation": "landscape"
         },
         "isActive_": true,
-        "certificateId_": "D7lrVvgaA06_susYcA-1rg2",
+        "certificateId_": "",
         "appName_": "MACP",
         "appID_": "xdk.intel.blank.ad.template.crosswalk",
         "appAccess_": {

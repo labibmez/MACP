@@ -10,6 +10,7 @@ var pageTitleElement;
 var currentItem;
 var searchParams;
 var HomeBackButton;
+var docMenu;
 var eligibility;
 var stopWFMessage;
 var TaskId;
@@ -18,6 +19,7 @@ var itemRef;
 
 var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left' }) ;
 var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
+
 
 var mainView = myApp.addView('.view-main', {
   dynamicNavbar: true,
@@ -283,12 +285,15 @@ function GetEditScreen(url,itemId){
                     url: url,
                     contentType: "text/plain",                          
                     dataType: "json",                      
-                    data: data, 
+                    data: data,        
                     success: function(data) { 
                         console.log(data);
                         document.getElementById("editScreenForm").innerHTML=data.content;
-                         $('#edit-toolbarContent').append(data.StarWFButton);
+                        $('#edit-toolbarContent').append(data.StarWFButton);
+                        $('#edit-toolbarContent').append(data.DocumentGeneration);
                         $('#edit-toolbarContent').append(data.Savebutton);
+                        $('#edit-toolbarContent').append(data.AddButton);
+                        docMenu=(data.DocumentMenu);
                         loadJSFile("js/EditScreen.js");
                         loadJSFile("js/WorkflowManager.js");
                          myApp.hidePreloader();
@@ -297,7 +302,7 @@ function GetEditScreen(url,itemId){
                        myApp.alert("error occured");      
                     }   
             });         
-};                
+};                 
 function GetNewInputScreen(url){
     $.ajax({ 
                     type: "GET", 
