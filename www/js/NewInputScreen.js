@@ -87,6 +87,7 @@ function saveNewInput(parameters)
             if(data.status==="ok")
                 {
                     itemId=data.itemId; 
+                    itemRef=data.itemRef;
                      mainView.router.load({url: "editScreen.html",reload:true});
                 }
             else  
@@ -99,7 +100,7 @@ function saveNewInput(parameters)
             verifconnexion = false;        
             myApp.hidePreloader();  
    
-                             
+                                 
         }                           
     });    
 }   

@@ -6,15 +6,16 @@ function startWorkflow_ButtonAction(itemId){
     var  GroupsList=GenerateResponseArray(sessionStorage.getItem("GroupsList")); 
      ProfilesList=JSON.stringify(ProfilesList); 
      GroupsList =JSON.stringify(GroupsList);   
-     var popupWidth=window.innerWidth*0.8;
-    popupWidth=Math.floor(popupWidth);
+   var popupWidth=window.innerWidth*0.80;
+     var popunHeight=95;
+    popupWidth=Math.floor(popupWidth); 
      var data="{"+          
         "\"entityName\":\""+currentItem+"\","+  
         "\"itemId\":\""+itemId+"\"," +
         "\"profilesList\":"+ProfilesList+","+
         "\"groupsList\":"+GroupsList+","+   
         "\"popupWidth\":\""+popupWidth+"\","+
-        "\"popupHeight\":\""+470+"\"}";    
+        "\"popupHeight\":\""+popunHeight+"\"}";    
     console.log("SearchParams",data);                
     $.ajax({             
         type: 'POST',               
@@ -32,12 +33,12 @@ function startWorkflow_ButtonAction(itemId){
             verifconnexion = false;  
         }                           
     });    
-}      
-
-
+}        
+      
+  
 function manageStartWorkFlowResponse(data){
     switch(data.status)
-        {
+        {  
             case "ok":
                 {
                   if(data.response==="defaultwf")
@@ -60,7 +61,7 @@ function manageStartWorkFlowResponse(data){
                   else
                         {
                             myApp.hidePreloader();
-                            myApp.popup('<div class="popup" style="width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important; margin-top: 0px !important; position:absoloute !important" >'+data.Content+'</div>', true);
+                            myApp.popup('<div class="popup" style="overflow:hidden !important; width: 80% !important; top: 10% !important;left: 10% !important; margin-left: 0px !important;height:80% !important; margin-top: 0px !important; position:absoloute !important; padding-left:5px !important; padding-right:5px !important ;padding-top:7px !important; padding-bottom:7px !important"  >'+data.Content+'</div>', true);
                             if(data.runningWF!=undefined)
                                   myApp.alert(data.runningWF,'MACP',function(){
                                      myApp.closeModal(".popup",true);

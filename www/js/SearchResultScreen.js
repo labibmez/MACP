@@ -1,7 +1,7 @@
 var loading = false;
 var selectedItem; 
 var SearchResultScreen_JSFlag;
-var itemRef;
+
 function editItem(id,reference){ 
     itemId=id;
     itemRef=reference;
