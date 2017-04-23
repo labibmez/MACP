@@ -34,10 +34,10 @@ input, textarea  {
 
 body {
     /* margin: 0.5rem ; */
-    background: white ;
+    background: white ; 
     color: black ;
 }
-
+  
 .align-center {
     text-align: center ;
 }

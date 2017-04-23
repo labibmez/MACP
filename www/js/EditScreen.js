@@ -142,10 +142,12 @@ function menuTabClick(divID,butDiv,screenEngine)
     $("div").siblings(".Active").removeClass('Active');
     $('#'+divID).addClass('Active'); 
     switch(screenEngine){ 
+           
         case "classicre" : 
             document.getElementById("saveBlock").classList.add("displayNone");
             document.getElementById("editBlock").classList.remove("displayNone");
             break;
+        case "attachment":    
         case "classicms":
             document.getElementById("editBlock").classList.add("displayNone");
             document.getElementById("saveBlock").classList.remove("displayNone");
@@ -187,16 +189,69 @@ $.ajax({
         var ref = cordova.InAppBrowser.open("data:application/pdf;base64,"+data.content,'_blank', 'location=no,closebuttoncaption=X,toolbarposition=top');
         }
     else
-        myApp.alert("android still to check with daly");
-//        document.getElementById("device").innerHTML="<a href=' window.open(decodeURIComponent(window.atob("+streamPDF+")), '_system', 'toolbar=yes,scrollbars=yes,resizable=yes,left=500,width=400,height=400')'>azerty</a>">;
-   //  window.open('http://192.168.1.47:92/ergon.pdf', '_system', 'toolbar=yes,scrollbars=yes,resizable=yes,left=500,width=400,height=400');
-
+            {
+         managePdfReaderInAndroid(documentName,data.content);
+            }
         },
         error: function(e) {
                 myApp.alert("error "+e.message);
 
         }                
     }); 
+}
+
+
+function managePdfReaderInAndroid(documentName,base64)
+{
+     var folderpath = cordova.file.externalRootDirectory;
+   var contentType = "application/pdf";
+    savebase64AsPDF(folderpath,documentName,base64,contentType);
+}
+
+function b64toBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }  
+
+      var blob = new Blob(byteArrays, {type: contentType});
+      return blob;
+}
+
+function savebase64AsPDF(folderpath,filename,content,contentType){
+    var DataBlob = b64toBlob(content,contentType);   
+    
+    console.log("Starting to write the file :3");
+    
+    window.resolveLocalFileSystemURL(folderpath, function(dir) {
+        console.log("Access to the directory granted succesfully");
+		dir.getFile(filename, {create:true}, function(file) {
+            console.log("File created succesfully.");
+            file.createWriter(function(fileWriter) {
+                console.log("Writing content to file");
+                fileWriter.write(DataBlob);
+                 
+            }, function(){
+                myApp.alert('Unable to save file in path '+ folderpath);
+            });
+		});
+    });
+    
+    window.open(folderpath+"//"+filename,"_system",'location=yes');
 }
 
 $$('.edit-mainData-form-to-data').on('click', function(){

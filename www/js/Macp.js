@@ -40,7 +40,7 @@ function isScreenInCache(screenName)
                 {
                 console.log("true");    
                 return true;
-                }
+                } 
         }
     console.log("false");   
     return false;
@@ -57,7 +57,6 @@ function westMenuItem(item,title,screenName){
       currentItem=item;
       pageTitleContent=title;
       mainView.router.load({url: screenName,reload:true});   
-    mainView.hideToolbar();
 };  
 
 myApp.onPageReinit('homePage', function (page) {
@@ -236,7 +235,7 @@ myApp.onPageInit('searchResultScreen', function (page) {
 myApp.onPageInit('executeTaskScreen', function (page) {
     HomeBackButton.style.visibility="visible";
     createLanguagesList('executeTaskScreen'); 
-    createLogoutPopover('executeTaskScreen');  
+    createLogoutPopover('executeTaskScreen');      
     myApp.params.swipePanel=false;
     pageTitleElement=document.getElementById("title_executeTaskScreen");
     pageTitleElement.textContent=pageTitleContent;
@@ -278,7 +277,7 @@ function GetEditScreen(url,itemId){
         "\"screenEngine\":\"empty\","+
         "\"screenWidth\":\""+window.innerWidth+"\"," +
         "\"screenHeight\":\""+window.innerHeight+"\"}";  
-    
+      
     $.ajax({ 
                     type: "POST", 
                     dataType:"json",  
@@ -308,14 +307,11 @@ function GetNewInputScreen(url){
                     type: "GET", 
                     dataType:"json",  
                     url: url,
-                    success: function(data) {                   
-                         mainView.showToolbar();
+                    success: function(data) {     
                         document.getElementById("newInputForm").innerHTML=data.content;
                         document.getElementById("newInput-toolbarContent").innerHTML=data.button;
-                        mainView.showToolbar();
                         loadJSFile("js/NewInputScreen.js");
                         loadJSFile("js/FormatUtils.js");
-
                          myApp.hidePreloader();
                     },
                     error: function(e) {
