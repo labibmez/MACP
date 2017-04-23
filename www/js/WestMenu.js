@@ -10,7 +10,6 @@ function westMenuItem(item,title,screenName){
       currentItem=item;
       pageTitleContent=title;
       mainView.router.load({url: screenName,reload:true});   
-    mainView.hideToolbar();
 }; 
 
 
