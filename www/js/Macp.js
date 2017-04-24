@@ -16,6 +16,7 @@ var stopWFMessage;
 var TaskId;
 var ExecutedWorkflowName;
 var itemRef;
+var fromNewInput;
 
 var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left',fastClicksDelayBetweenClicks : 10 }) ;
 var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
@@ -58,6 +59,7 @@ function westMenuItem(item,title,screenName){
         }
       currentItem=item;
       pageTitleContent=title;
+      fromNewInput=false;
       mainView.router.load({url: screenName,reload:true});   
 };  
 
@@ -204,6 +206,8 @@ myApp.onPageInit('editScreen', function (page) {
     createLogoutPopover('editScreen');
     myApp.params.swipePanel=false;
     myApp.showPreloader();
+    if(fromNewInput===true)
+    document.getElementById("backButton").style.display = "none"; 
     pageTitleElement=document.getElementById("title_editScreen");
     pageTitleElement.textContent=itemRef;
     setTemplate_HeaderData('editScreen');
@@ -214,7 +218,7 @@ myApp.onPageInit('newInputScreen', function (page) {
     HomeBackButton.style.visibility="visible"; 
     createLanguagesList('newInputScreen'); 
     createLogoutPopover('newInputScreen');
-    myApp.params.swipePanel=false;
+    myApp.params.swipePanel=false;   
     pageTitleElement=document.getElementById("title_newInputScreen");
     pageTitleElement.textContent=pageTitleContent;
     myApp.showPreloader();

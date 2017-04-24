@@ -205,7 +205,7 @@ function managePdfReaderInAndroid(documentName,base64)
 {
      var folderpath = cordova.file.externalRootDirectory;
    var contentType = "application/pdf";
-    savebase64AsPDF(folderpath,documentName,base64,contentType);
+    savebase64AsPDF(folderpath,documentName+".pdf",base64,contentType);
 }
 
 function b64toBlob(b64Data, contentType, sliceSize) {
@@ -251,7 +251,7 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 		});
     });
     
-    window.open(folderpath+"//"+filename,"_system",'location=yes');
+     window.open(folderpath+"//"+filename,"_system",'location=yes');
 }
 
 $$('.edit-mainData-form-to-data').on('click', function(){
