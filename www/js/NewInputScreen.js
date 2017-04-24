@@ -88,7 +88,9 @@ function saveNewInput(parameters)
                 {
                     itemId=data.itemId; 
                     itemRef=data.itemRef;
-                     mainView.router.load({url: "editScreen.html",reload:true});
+                    mainView.router.load({url: "editScreen.html",reload:true});
+                    fromNewInput=true;
+                   
                 }
             else  
                 {
