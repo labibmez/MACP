@@ -194,7 +194,7 @@ myApp.onPageInit('searchScreen', function (page) {
     myApp.params.swipePanel=false;
     pageTitleElement=document.getElementById("title_searchScreen");
     console.log(pageTitleElement);
-    pageTitleElement.textContent=pageTitleContent;
+    pageTitleElement.textContent=pageTitleContent;  
     console.log(pageTitleContent);
     myApp.showPreloader();
     setTemplate_HeaderData('searchScreen');  
@@ -267,7 +267,7 @@ function loadTaskList() {
      var deviceWidth = window.innerWidth - 50;
       GetHomePage('http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/getHomePage');  
 }; 
-function loadNewInputPage(){
+function loadNewInputPage(){  
     currentItem=currentItem.toLowerCase();
     var url='http://'+sessionStorage.getItem('Ip_config')+':'+sessionStorage.getItem('Ip_port')+'/MobileAPI.svc/GetNewInputScreen/'+currentItem;
     GetNewInputScreen(url);
@@ -279,17 +279,18 @@ function loadEditScreen(itemId){
 function GetEditScreen(url,itemId){ 
      var data="{"+            
         "\"screenName\":\""+currentItem+"\","+
-        "\"mainItemId\":\""+itemId+"\"," +  
+        "\"mainItemId\":\""+itemId+"\"," +
+        "\"targetTab\":\""+targetTab+"\"," +  
         "\"screenEngine\":\"empty\","+
         "\"screenWidth\":\""+window.innerWidth+"\"," +
         "\"screenHeight\":\""+window.innerHeight+"\"}";  
       
     $.ajax({ 
-                    type: "POST", 
+                    type: "POST",  
                     dataType:"json",  
-                    url: url,
+                    url: url,    
                     contentType: "text/plain",                          
-                    dataType: "json",                      
+                    dataType: "json",                        
                     data: data,        
                     success: function(data) { 
                         console.log(data);
@@ -506,15 +507,15 @@ function lunchSearchResult(url){
  
                          
         }                           
-    });    
+    });      
 };         
 function generateConnectedComboItems(idChild,screenTagName,val,child,entity){ 
-    var url =  "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/ConnectedComboOptions/"+val.value+"/"+screenTagName+"/"+child+"/"+entity;
+    var url =  "http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/ConnectedComboOptions/"+val.value+"/"+screenTagName+"/"+child+"/"+entity; 
     setTimeout(function() {connectedComboOptions(url,idChild);},100);       
 
 }; 
 function connectedComboOptions(url,idChild) {
-    $.ajax({ 
+    $.ajax({   
                     type: "GET", 
                     dataType:"json",
                     url:url,
@@ -523,7 +524,7 @@ function connectedComboOptions(url,idChild) {
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log(errorThrown+'  in processing!'+textStatus);
-                    }                
+                    }                   
             });        
 };
 function HomeBack(){
@@ -574,9 +575,10 @@ function updateWsConfiguration(ip,port){
        sessionStorage.setItem('Ip_config', ip);
     sessionStorage.setItem('Ip_port', port);   
 };
-function ExecuteTask(taskId,workflowName){
+function ExecuteTask(taskId,workflowName,targettab){
     TaskId=taskId;
     ExecutedWorkflowName=workflowName;
+    targetTab = targettab;
     mainView.router.load({url: "executeTaskScreen.html",reload:true});
 }
 function GetExecuteTaskScreen(url){
@@ -589,6 +591,7 @@ function GetExecuteTaskScreen(url){
     var data="{"+  
         "\"userId\":\""+sessionStorage.getItem("userId")+"\"," +
         "\"taskId\":\""+TaskId+"\"," +
+        "\"targetTab\":\""+targetTab+"\"," +  
         "\"userShortName\":\""+setUser_ShortName(sessionStorage.getItem("userShortName"))+"\"," +
         "\"interalEntites\":"+InternalEntities+","+
         "\"profilesList\":"+ProfilesList+","+      
@@ -596,7 +599,7 @@ function GetExecuteTaskScreen(url){
         "\"screenWidth\":\""+window.innerWidth+"\","+
         "\"screenHeight\":\""+(window.innerHeight-90)+"\"}";
   $.ajax({             
-        type: 'POST',           
+        type: 'POST',                                
         url: url,                  
         contentType: "text/plain",                           
         dataType: "json",                            
@@ -613,7 +616,8 @@ function GetExecuteTaskScreen(url){
                      pageTitleElement.textContent=data.itemShortName;
                      $('#executeTask-toolbarContent').append(data.endTaskButton);
                      $('#executeTask-toolbarContent').append(data.stopWorkflowButton);
-                     $('#executeTask-toolbarContent').append(data.saveButton);
+                     $('#executeTask-toolbarContent').append(data.SaveButton);
+                     $('#executeTask-toolbarContent').append(data.AddButton);
                      $('#executeTask-toolbarContent').append(data.DocumentGeneration);
                     docMenu=(data.DocumentMenu);
                         loadJSFile("js/EditScreen.js");

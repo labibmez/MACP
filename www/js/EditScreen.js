@@ -72,6 +72,7 @@ function loadScreen(divID)     {
                                      break;
                                     }
                                 case ("classicre") :
+                                case ("classicms") :
                                     {
                                     document.getElementById(divID).innerHTML=data.content;       
                                     myApp.hidePreloader();
@@ -139,7 +140,9 @@ function menuTabClick(divID,butDiv,screenEngine)
         $('#'+butDiv).addClass('loaded');             
         loadScreen(divID);
     }
+
     $("div").siblings(".Active").removeClass('Active');
+
     $('#'+divID).addClass('Active'); 
     switch(screenEngine){ 
            
