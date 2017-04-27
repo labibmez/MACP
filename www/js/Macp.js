@@ -529,6 +529,7 @@ function connectedComboOptions(url,idChild) {
 function HomeBack(){
     HomeBackButton.style.visibility="hidden";       
     mainView.router.back({force:true,pageName:"homePage"});
+    mainView.history=["#homePage"];
     leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
 };  
 function manageDB(){
