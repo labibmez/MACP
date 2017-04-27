@@ -26,7 +26,9 @@ function stopWorkflow(){
             if(data.status==="ok")
                 {
                     myApp.hidePreloader(); 
-                    mainView.router.back({force:true,pageName:"homePage"});          
+                    mainView.router.back({force:true,pageName:"homePage"});
+                    mainView.history=["#homePage"];
+                    leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
                 }
             else                     
                 { 
@@ -123,6 +125,8 @@ function endTaskEvent(){
                                             myApp.hidePreloader(); 
                                             HomeBackButton.style.visibility="hidden";       
                                             mainView.router.back({force:true,pageName:"homePage"});
+                                            mainView.history=["#homePage"];
+                                            leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
                                         }
                                         
                                 }
@@ -185,6 +189,8 @@ function checkRequiredDocument(){
                           myApp.hidePreloader(); 
                             HomeBackButton.style.visibility="hidden";       
                             mainView.router.back({force:true,pageName:"homePage"});
+                            mainView.history=["#homePage"];
+                            leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
                         }
                 }    
             else                       
@@ -231,6 +237,8 @@ function saveRequiredDocumentComent(){
                             myApp.hidePreloader(); 
                             HomeBackButton.style.visibility="hidden";       
                             mainView.router.back({force:true,pageName:"homePage"});
+                            mainView.history=["#homePage"];
+                            leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
                         }
                     
                 }    
@@ -285,6 +293,8 @@ function saveDeviationComment(){
                         {
                              HomeBackButton.style.visibility="hidden";       
                              mainView.router.back({force:true,pageName:"homePage"});
+                             mainView.history=["#homePage"];
+                             leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
                         }
                 }      
             else                       
@@ -351,6 +361,8 @@ function saveEligibilityComment(){
                         {
                         HomeBackButton.style.visibility="hidden";       
                              mainView.router.back({force:true,pageName:"homePage"});
+                             mainView.history=["#homePage"];
+                             leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
                         }
                     
                 }    

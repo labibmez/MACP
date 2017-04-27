@@ -202,7 +202,7 @@ $.ajax({
         }                
     }); 
 }
-
+  
 
 function managePdfReaderInAndroid(documentName,base64)
 {
@@ -216,7 +216,7 @@ function b64toBlob(b64Data, contentType, sliceSize) {
         sliceSize = sliceSize || 512;
 
         var byteCharacters = atob(b64Data);
-        var byteArrays = [];
+        var byteArrays = [];    
 
         for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
             var slice = byteCharacters.slice(offset, offset + sliceSize);
