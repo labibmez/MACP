@@ -3,7 +3,7 @@
 function saveConfiguration() {
     ip = document.getElementById('ip').value,
     port = document.getElementById('port').value;
-   updateFromEmulator(ip,port);
+    updateFromDevice(ip,port);
     mainView.router.back();                            
  }  
 
@@ -23,6 +23,8 @@ function updateFromDevice(ip, port)
 }
                                            
 $$('.WS-confirm-ok-cancel').on('click', function () {
+    mainView.router.back(true);
+    /*
     myApp.confirm('Are you sure want to exit from App?', 'MACP',
       function () {
        navigator.app.exitApp();
@@ -30,4 +32,5 @@ $$('.WS-confirm-ok-cancel').on('click', function () {
       function () {
       }
     );
+    */
 });          

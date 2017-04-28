@@ -169,6 +169,7 @@ myApp.popup('<div id="documentMenuPopup" class="popup" style="width: 60% !import
 }
 
 function generateDocument(documentName,item){
+    myApp.showPreloader();
      var url="http://"+sessionStorage.getItem('Ip_config')+":"+sessionStorage.getItem('Ip_port')+"/MobileAPI.svc/ExportReport";
     
           var data="{"+  
@@ -185,7 +186,8 @@ $.ajax({
         data : data, 
         success: function(data) {     
     if(device.manufacturer.toLowerCase()==="apple")
-        {        
+        { 
+            myApp.hidePreloader();
         var ref = cordova.InAppBrowser.open("data:application/pdf;base64,"+data.content,'_blank', 'location=no,closebuttoncaption=X,toolbarposition=top');
         }
     else
@@ -234,7 +236,7 @@ function b64toBlob(b64Data, contentType, sliceSize) {
 
 function savebase64AsPDF(folderpath,filename,content,contentType){
     var DataBlob = b64toBlob(content,contentType);   
-    
+  
     console.log("Starting to write the file :3");
     
     window.resolveLocalFileSystemURL(folderpath, function(dir) {
@@ -250,7 +252,7 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
             });
 		});
     });
-    
+     myApp.hidePreloader();
      window.open(folderpath+"//"+filename,"_system",'location=yes');
 }
 
