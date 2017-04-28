@@ -149,6 +149,12 @@
     content : "\f014";
     font-size:20px;
 }
+.homeIcon:before{
+    font-family: FontAwesome !important;
+    color: #fff !important;
+    content : "\f015";
+    font-size:25px;
+}
  
 
 .navbarGlobeIcon:before{
@@ -177,6 +183,24 @@
     font-family: FontAwesome !important;
     color: #2196f3 !important;
     content : "\f013 ";
+    font-size:25px;
+}
+.passwordIcon:before{
+    font-family: FontAwesome !important;
+    color: #2196f3 !important;
+    content : "\f084  ";
+    font-size:25px;
+}
+.ipAddressIcon:before{
+    font-family: FontAwesome !important;
+    color: #2196f3 !important;
+    content : "\f1fa   ";
+    font-size:25px;
+}
+.portIcon:before{
+    font-family: FontAwesome !important;
+    color: #2196f3 !important;
+    content : "\f1e6";
     font-size:25px;
 }
 

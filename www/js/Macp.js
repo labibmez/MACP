@@ -17,6 +17,9 @@ var TaskId;
 var ExecutedWorkflowName;
 var itemRef;
 var fromNewInput;
+var divId; 
+var engine;
+
 
 var myApp=new Framework7({ swipeBackPage : false, statusbarOverlay:true, tapHold: true,swipePanel: 'left',fastClicksDelayBetweenClicks : 10 }) ;
 var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
@@ -299,12 +302,14 @@ function GetEditScreen(url,itemId){
                         $('#edit-toolbarContent').append(data.DocumentGeneration);
                         $('#edit-toolbarContent').append(data.Savebutton);
                         $('#edit-toolbarContent').append(data.AddButton);
+                        divId = data.divId;
+                        engine = data.screenEngine;                        
                         docMenu=(data.DocumentMenu);
                         loadJSFile("js/EditScreen.js");
-                        loadJSFile("js/WorkflowManager.js");
+                        loadJSFile("js/WorkflowManager.js"); 
                          myApp.hidePreloader();
                     },
-                    error: function(e) {
+                    error: function(e) { 
                        myApp.alert("error occured");      
                     }   
             });         
@@ -546,7 +551,7 @@ function getWsConfiguration(){
             tx.executeSql('SELECT * FROM WS', [], function (tx, results) {
                var len = results.rows.length, i;
                 if(results.rows.length!=0)
-                    {
+                    { 
                var 	ip=results.rows.item(0).ip;
                 var  port=results.rows.item(0).port;
              sessionStorage.setItem('Ip_config', ip);
@@ -620,6 +625,8 @@ function GetExecuteTaskScreen(url){
                      $('#executeTask-toolbarContent').append(data.SaveButton);
                      $('#executeTask-toolbarContent').append(data.AddButton);
                      $('#executeTask-toolbarContent').append(data.DocumentGeneration);
+                        divId = data.divId;
+                        engine = data.screenEngine;    
                     docMenu=(data.DocumentMenu);
                         loadJSFile("js/EditScreen.js");
                         loadJSFile("js/ExecuteTaskScreen.js");

@@ -1,6 +1,4 @@
-var divId;
 var EditScreen_JSFlag;
-var engine;
 var relatedItemId;
 var fileUploadedName;
 var fileData;
@@ -11,7 +9,7 @@ function loadRelatedItemPopup(id,isDuplicateAction)
        relatedItemId=id;
        isDuplicate=isDuplicateAction;
 
-       myApp.showPreloader();
+       myApp.showPreloader(); 
             $.ajax({ 
                     type: "GET", 
                     dataType:"json",   
@@ -22,7 +20,7 @@ function loadRelatedItemPopup(id,isDuplicateAction)
                     }, 
                     error: function(e) {
                        myApp.alert("error occured");       
-                    }   
+                    }        
             });   
 }
 
@@ -46,7 +44,7 @@ function manageAttechementElement()
     
 
 
-function loadScreen(divID)     {
+function loadScreen(divID)     {    
      var data="{"+             
         "\"screenName\":\""+divId+"\","+ 
         "\"mainItemId\":\""+itemId+"\"," +
@@ -79,15 +77,14 @@ function loadScreen(divID)     {
                                     break;
                                      }
                             }
-                        
-
+ 
                     },   
                     error: function(e) {
                        myApp.alert("error occured"+e);          
      
             myApp.hidePreloader();  
                     }   
-            });           
+            });             
 }
            
 function deleteRelatedItem(id, culture, confirmationMessage)
