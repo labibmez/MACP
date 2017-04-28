@@ -33,6 +33,17 @@ var leftView = myApp.addView('.view-left', {
       domCache :true
 });
 
+$$('.firstWS-confirm-ok-cancel').on('click', function () {
+    myApp.confirm('Are you sure want to exit from App?', 'MACP',
+      function () {
+       navigator.app.exitApp();
+      },
+      function () {
+      }
+    );
+    
+});  
+     
 function isScreenInCache(screenName)
 {
     var history=mainView.history;
@@ -116,9 +127,9 @@ GetHomePageScripts();
 function saveFirstConfig(){
     ip = document.getElementById('ipFirstConfig').value,
     port = document.getElementById('portFirstConfig').value;
-    sessionStorage.setItem('Ip_config', ip);
-    sessionStorage.setItem('Ip_port', port);
-  //  saveWsConfiguration(ip,port);
+    //sessionStorage.setItem('Ip_config', ip);
+   // sessionStorage.setItem('Ip_port', port);
+    saveWsConfiguration(ip,port);
     myApp.closeModal();
 };       
 function loadJSFile(screenName){
@@ -130,7 +141,7 @@ function loadJSFile(screenName){
           
             myApp.alert("is loaded "+scripts[i].getAttribute('src'));            
             isJsloaded=true;
-        }    
+        }      
     if(!isJsloaded)
         {   */            
             var js = document.createElement("script");
@@ -166,8 +177,8 @@ function onDeviceReady() {
     // Now safe to use device APIs
          HomeBackButton=document.getElementById("homeBackButton");
      myApp.params.swipePanel=false;
-    verifConfig();
-    //verifDeviceConfig();   
+   // verifConfig();
+    verifDeviceConfig();   
    // }
 } 
 /*myApp.onPageInit('home', function (page) { 
@@ -496,7 +507,7 @@ function lunchSearchResult(url){
             loadJSFile("js/SearchResultScreen.js");
             myApp.hidePreloader();
             
-        },  
+        },   
         error: function(e) { 
             console.log(e.message);  
             verifconnexion = false;  
@@ -528,7 +539,7 @@ function connectedComboOptions(url,idChild) {
 };
 function HomeBack(){
     HomeBackButton.style.visibility="hidden";       
-    mainView.router.back({force:true,pageName:"homePage"});
+    mainView.router.back({force:true,pageName:"homePage"});  
     mainView.history=["#homePage"];
     leftView.router.load({force : true,pageName:'MenuParent',animatePages:false});
 };  
@@ -620,6 +631,11 @@ function GetExecuteTaskScreen(url){
                         loadJSFile("js/EditScreen.js");
                         loadJSFile("js/ExecuteTaskScreen.js");
                     myApp.hidePreloader();      
+                }
+            else if(data.status==="item not found")
+                {
+                     myApp.hidePreloader(); 
+                     myApp.alert("Item not found in database");
                 }
             else                     
                 { 
