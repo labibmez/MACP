@@ -320,7 +320,8 @@ function GetEditScreen(url,itemId){
                         loadJSFile("js/WorkflowManager.js"); 
                          myApp.hidePreloader();
                     },
-                    error: function(e) { 
+                    error: function(e) {
+                       myApp.hidePreloader();    
                        myApp.alert("error occured");      
                     }   
             });         
@@ -357,7 +358,8 @@ function GetSearchPage(url){
                          myApp.hidePreloader();
                     },
                     error: function(e) {
-                       myApp.alert("error occured");      
+                        myApp.hidePreloader();
+                        myApp.alert("error occured");       
 
                     }  
                  
@@ -434,7 +436,7 @@ function GetHomePage(url) {
              myApp.hidePreloader();
         },
         error: function(e) {  
-             myApp.hideIndicator();     
+             myApp.hidePreloader();    
               myApp.alert("error occured in the system");
         }
     });          
@@ -657,7 +659,8 @@ function GetExecuteTaskScreen(url){
              
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                  
+            myApp.hidePreloader();
+            myApp.alert("error occured");                   
         }                             
     });     
 }

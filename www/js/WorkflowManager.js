@@ -39,6 +39,8 @@ function startWorkflow_ButtonAction(itemId){
         },
         error: function(e) {         
             verifconnexion = false;  
+             myApp.hidePreloader();
+            myApp.alert("error occured"); 
         }                           
     });    
 }        
@@ -131,7 +133,8 @@ function startWorkFlowItem(){
         },
         error: function(e) {       
             console.log(e.message);      
-                         
+              myApp.hidePreloader();
+            myApp.alert("error occured");             
         }                                 
     });      
 }
@@ -273,7 +276,8 @@ function checkWorkflowEligibility(){
         error: function(e) {         
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                  
+            myApp.hidePreloader();
+            myApp.alert("error occured");                   
         }                                         
     }); 
 
@@ -332,7 +336,8 @@ function saveStartWFDeviationComment(){
         error: function(e) {           
             console.log(e.message);  
             verifconnexion = false;          
-            myApp.hidePreloader();                    
+             myApp.hidePreloader();
+            myApp.alert("error occured");                     
         }                                         
     });       
 }
@@ -371,7 +376,8 @@ function saveStartWorkflow_EligibilityComment(){
         error: function(e) {         
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                  
+             myApp.hidePreloader();
+            myApp.alert("error occured");                   
         }                                         
     }); 
 }
@@ -416,7 +422,8 @@ function saveStartWorkflow_RequiredMitigantComent()
         error: function(e) {           
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                    
+            myApp.hidePreloader();
+            myApp.alert("error occured");                     
         }                                         
     }); 
 }
@@ -460,7 +467,8 @@ function saveStartWorkflow_RequiredDocumentComent(){
         error: function(e) {           
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                    
+            myApp.hidePreloader();
+            myApp.alert("error occured");                     
         }                                         
     }); 
 }

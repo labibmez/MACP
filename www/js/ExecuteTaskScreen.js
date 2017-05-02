@@ -38,7 +38,8 @@ function stopWorkflow(){
         error: function(e) {         
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                  
+            myApp.hidePreloader();   
+            myApp.alert("error occured"); 
         }                             
     });     
 }      
@@ -139,7 +140,9 @@ function endTaskEvent(){
         },
         error: function(e) {         
             console.log(e.message);  
-            verifconnexion = false;                    
+            verifconnexion = false;
+             myApp.hidePreloader();
+            myApp.alert("error occured in the system");
         }                                         
     });      
 }         
@@ -245,12 +248,14 @@ function saveRequiredDocumentComent(){
             else                         
                 { 
                     myApp.hidePreloader();
+                    myApp.alert("error saving"); 
                 }
         },  
         error: function(e) {           
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                    
+             myApp.hidePreloader();
+            myApp.alert("error occured in the system");                   
         }                                         
     }); 
 }
@@ -300,12 +305,14 @@ function saveDeviationComment(){
             else                       
                 { 
                     myApp.hidePreloader();
+                    myApp.alert("error saving"); 
                 }
         },
         error: function(e) {         
             console.log(e.message);  
             verifconnexion = false;          
-            myApp.hidePreloader();                    
+             myApp.hidePreloader();
+            myApp.alert("error occured in the system");                    
         }                                         
     });       
 }
@@ -369,12 +376,14 @@ function saveEligibilityComment(){
             else                       
                 { 
                     myApp.hidePreloader();
+                     myApp.alert("error saving"); 
                 }
         },
         error: function(e) {         
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                  
+            myApp.hidePreloader(); 
+            myApp.alert("error occured in the system");
         }                                         
     });      
 }
