@@ -100,7 +100,8 @@ function saveNewInput(parameters)
         error: function(e) { 
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();  
+             myApp.hidePreloader();
+            myApp.alert("error occured");   
    
                                  
         }                           

@@ -19,6 +19,7 @@ function loadRelatedItemPopup(id,isDuplicateAction)
                         myApp.hidePreloader();
                     }, 
                     error: function(e) {
+                        myApp.hidePreloader();
                        myApp.alert("error occured");       
                     }        
             });   
@@ -80,9 +81,8 @@ function loadScreen(divID)     {
  
                     },   
                     error: function(e) {
-                       myApp.alert("error occured"+e);          
-     
-            myApp.hidePreloader();  
+                       myApp.hidePreloader();
+                       myApp.alert("error occured"); 
                     }   
             });             
 }
@@ -119,9 +119,8 @@ function deleteItem(id,culture){
                         });
                     },    
                     error: function(e) {
-                       myApp.alert("error occured"+e);          
-     
-            myApp.hidePreloader();  
+                        myApp.hidePreloader();
+                       myApp.alert("error occured");  
                     }   
             });     
 }
@@ -196,8 +195,8 @@ $.ajax({
             }
         },
         error: function(e) {
-                myApp.alert("error "+e.message);
-
+                myApp.hidePreloader();
+                myApp.alert("error occured"); 
         }                
     }); 
 }
@@ -207,7 +206,7 @@ function managePdfReaderInAndroid(documentName,base64)
 {
      var folderpath = cordova.file.externalRootDirectory;
    var contentType = "application/pdf";
-    savebase64AsPDF(folderpath,documentName+".pdf",base64,contentType);
+    savebase64AsPDF(folderpath,documentName+"_"+itemId+".pdf",base64,contentType);
 }
 
 function b64toBlob(b64Data, contentType, sliceSize) {
@@ -471,7 +470,8 @@ function UpdateRelatedItem(parameters,msg){
              
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader(); 
+            myApp.hidePreloader();
+            myApp.alert("error occured"); 
       
                              
         }                           
@@ -513,7 +513,8 @@ function uploadAttachementFile(){
              
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader();                  
+            myApp.hidePreloader(); 
+            myApp.alert("error occured");
         }                           
     });   
      
@@ -552,7 +553,8 @@ function UpdateItem(parameters){
         error: function(e) { 
             console.log(e.message);  
             verifconnexion = false;        
-            myApp.hidePreloader(); 
+            myApp.hidePreloader();
+            myApp.alert("error occured");
    
                              
         }                           

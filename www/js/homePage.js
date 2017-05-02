@@ -146,6 +146,7 @@ for (i = 0; i < selectedRow.length; i++)
                         myApp.hidePreloader();
                     }, 
                     error: function(e) {
+                       myApp.hidePreloader();
                        myApp.alert("error occured");       
                     }   
             });   
@@ -182,6 +183,7 @@ function ReassignTasks(userShortName,confirmMessage)
                             });                        
                     }, 
                     error: function(e) {
+                        myApp.hidePreloader();
                        myApp.alert("error occured");       
                     }   
             }); 
